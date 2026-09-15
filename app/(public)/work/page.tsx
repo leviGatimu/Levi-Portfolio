@@ -8,10 +8,10 @@ import type { ProjectType } from "@/types/database";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Work",
+  title: "Projects",
   description: "Software, AI and robotics projects by Levi Gatimu, student developer in Kigali.",
   alternates: { canonical: "/work" },
-  openGraph: { type: "website", url: "/work", title: "Work · Levi Gatimu" },
+  openGraph: { type: "website", url: "/work", title: "Projects · Levi Gatimu" },
 };
 
 const FILTERS: { key: ProjectType | "all"; label: string }[] = [
@@ -35,9 +35,9 @@ export default async function WorkPage({ searchParams }: { searchParams: Promise
       <section className="px-6 pb-16 pt-40">
         <div className="mx-auto max-w-7xl">
           <ScrollReveal className="max-w-4xl">
-            <span className="eyebrow">Work</span>
+            <span className="eyebrow">Projects</span>
             <h1 className="mt-6 font-display text-6xl font-semibold leading-[0.9] tracking-tight text-slate-900 md:text-8xl dark:text-slate-50">
-              Things I <span className="text-blue-600 dark:text-blue-400">built.</span>
+              Projects and <span className="text-blue-600 dark:text-blue-400">experiments.</span>
             </h1>
             <p className="mt-7 max-w-2xl text-xl leading-relaxed text-slate-500 md:text-2xl dark:text-slate-400">
               {all.length === 0 ? "The first case studies are on their way." : `${all.length} ${all.length === 1 ? "project" : "projects"}, each with the real screenshots and the story of how it was made.`}

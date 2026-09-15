@@ -14,8 +14,8 @@ export default function Footer({ settings }: { settings: SiteSettingsRow }) {
     {
       title: "Explore",
       links: [
-        { label: "Work", href: "/work" },
-        { label: "Experiments", href: "/experiments" },
+        { label: "Projects", href: "/work" },
+        { label: "Experiments", href: "/work?type=experiment" },
         { label: "About", href: "/about" },
         { label: "Journey", href: "/journey" },
         { label: "Skills", href: "/skills" },
@@ -105,7 +105,7 @@ export default function Footer({ settings }: { settings: SiteSettingsRow }) {
         <div className="flex flex-col items-center justify-between gap-4 py-8 text-xs text-slate-400 md:flex-row dark:text-slate-500">
           <p>© {new Date().getFullYear()} {settings.display_name}. Built with Next.js and Supabase.</p>
           <div className="flex gap-8">
-            <Link href="/work" className="transition-colors hover:text-slate-900 dark:hover:text-white">Work</Link>
+            <Link href="/work" className="transition-colors hover:text-slate-900 dark:hover:text-white">Projects</Link>
             <Link href="/about" className="transition-colors hover:text-slate-900 dark:hover:text-white">About</Link>
             <span>Kigali, Rwanda</span>
           </div>

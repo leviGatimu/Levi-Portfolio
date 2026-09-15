@@ -62,7 +62,7 @@ export function CaseStudy({ project, next, position, preview = false }: Props) {
         <div className="mx-auto max-w-7xl">
           <ScrollReveal className="max-w-4xl">
             <Link href="/work" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
-              <ArrowLeft size={16} /> All work
+              <ArrowLeft size={16} /> All projects
             </Link>
             <div className="mt-8 flex flex-wrap items-center gap-2">
               <span className="rounded-full bg-blue-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-blue-600 dark:bg-blue-500/15 dark:text-blue-300">{TYPE_LABEL[project.type]}</span>

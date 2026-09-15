@@ -23,8 +23,7 @@ export default function Navbar({ name }: Props) {
   }, []);
 
   const links = [
-    { label: "Work", href: "/work" },
-    { label: "Experiments", href: "/experiments" },
+    { label: "Projects", href: "/work" },
     { label: "About", href: "/about" },
     { label: "Journey", href: "/journey" },
     { label: "Skills", href: "/skills" },
@@ -38,7 +37,7 @@ export default function Navbar({ name }: Props) {
 
         <div className="hidden items-center gap-8 md:flex">
           {links.map((link) => {
-            const active = !link.href.includes("#") && pathname.startsWith(link.href);
+            const active = !link.href.includes("#") && (pathname.startsWith(link.href) || (link.href === "/work" && pathname.startsWith("/experiments")));
             return (
               <Link
                 key={link.href}
