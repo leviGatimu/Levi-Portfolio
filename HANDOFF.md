@@ -30,6 +30,7 @@ Solved (V1 code complete) — 2026-09-15. `npm run build`, `typecheck`, `lint` a
 - Next step on resume: if migrations are applied, log in at `/admin/login`, create a real project end-to-end (upload → publish) and confirm it appears on `/`; then deploy to Vercel and run Lighthouse on the preview URL.
 
 ## Recently Completed
+- 2026-09-16: admin rebuilt in the monochrome reference style (D29): grouped sidebar, header with search/Add/user menu, breadcrumbs, icon-circle cards; new pages Skills, Journey, Home, About, Now, Contact, Profile, Site settings; field-scoped settings saves.
 - 2026-09-15: technology logos everywhere (Simple Icons CDN via `TechLogo`, `technologies.icon` column, migration 0007), home Toolbox logo wall, logos on cards, case studies, Skills and About.
 - 2026-09-15 (late night): admin rebuilt as a light dashboard (sidebar + header; Dashboard, Projects, Analytics, Media, Technologies, Site) with first-party cookieless analytics (migration 0006, `/api/view`, `lib/db/admin.ts`, SVG charts), guided project creation with a completeness meter; public site gained Experiments, Journey, Skills, Now and Contact pages.
 - 2026-09-15 (night): public site rebuilt as a rebranded copy of the Study Tracker website design (D27); photo `public/portrait.png` used as rounded cards; dashes rule kept.

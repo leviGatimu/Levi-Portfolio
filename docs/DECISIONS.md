@@ -193,3 +193,9 @@ Format: **Decision · Reason · Alternatives · Consequences · Date · Status.*
 - **Reason:** Levi asked for a proper admin dashboard with graphs and more pages on both sides. Third-party analytics would add a vendor and a cookie banner; a `page_views` table written through a validated `security definer` function (path, referrer host, country from the edge header, device class; no IP, no identifiers) gives real graphs with no privacy cost.
 - **Consequences:** Admin: Dashboard, Projects, Analytics, Media, Technologies, Site settings, on a light sidebar+header shell matching the public site; project creation is a guided flow with a completeness meter. Public: Home, Work, Experiments, About, Journey, Skills, Now, Contact. Charts are hand-written SVG following the dataviz guidance (single blue series, hairline grid, crosshair tooltip, table view). Migration 0006 is required for analytics and the Journey timeline.
 - **Date:** 2026-09-15 · **Status:** Accepted
+
+### D29 — Admin rebuilt on a quiet monochrome dashboard pattern (supersedes the admin parts of D28)
+
+- **Reason:** Levi found the blue dashboard overdone and asked for the calm, white-card, black-pill style of a reference admin (grouped sidebar, header with search / Add / user menu, breadcrumb bar, icon-circle card headers, info rows), plus more editable pages.
+- **Consequences:** `components/admin/ui.tsx` (Card, InfoRow, IconButton, Breadcrumbs, neutral tokens), `AdminShell` + `AdminHeader` + grouped `AdminNav`. Sections: Overview (Dashboard, Analytics), Content (Projects, Skills, Journey, Media), Pages (Home, About, Now, Contact), Settings (Profile, Site settings). Each page saves only its own fields through `updateSiteFields(keys)`; `/admin/technologies` and `/admin/site` redirect. Charts are monochrome.
+- **Date:** 2026-09-16 · **Status:** Accepted

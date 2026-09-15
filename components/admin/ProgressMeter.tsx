@@ -24,24 +24,24 @@ export function ProgressMeter({ project }: { project: ProjectWithRelations }) {
   const done = steps.filter((s) => s.done).length;
   const pct = Math.round((done / steps.length) * 100);
   return (
-    <div className="rounded-[1.5rem] border border-black/[0.06] bg-white p-6 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.35)]">
+    <div className="rounded-[18px] border border-black/[0.07] bg-white p-5">
       <div className="flex items-baseline justify-between">
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-blue-600">Completeness</p>
-        <p className="text-sm font-semibold text-slate-900">{done} / {steps.length}</p>
+        <p className="text-[15px] font-semibold text-[#111]">Completeness</p>
+        <p className="text-[13px] font-medium text-[#555]">{done} / {steps.length}</p>
       </div>
-      <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label="Project completeness">
-        <div className="h-full rounded-full bg-blue-600 transition-[width] duration-500" style={{ width: `${pct}%` }} />
+      <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[#eeeef0]" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label="Project completeness">
+        <div className="h-full rounded-full bg-[#111] transition-[width] duration-500" style={{ width: `${pct}%` }} />
       </div>
       <ol className="mt-5 space-y-3">
         {steps.map((s) => (
           <li key={s.key}>
             <a href={s.href} className="group flex items-start gap-3">
-              <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${s.done ? "bg-emerald-500 text-white" : "border border-black/15 text-transparent"}`}>
+              <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${s.done ? "bg-[#111] text-white" : "border border-black/15 text-transparent"}`}>
                 {s.done ? <Check size={12} strokeWidth={3} /> : <Circle size={8} />}
               </span>
               <span>
-                <span className={`block text-sm font-semibold ${s.done ? "text-slate-500 line-through decoration-slate-300" : "text-slate-900 group-hover:text-blue-600"}`}>{s.label}</span>
-                <span className="block text-xs text-slate-500">{s.hint}</span>
+                <span className={`block text-[13px] font-medium ${s.done ? "text-[#8a8a8a] line-through decoration-[#ccc]" : "text-[#111] group-hover:underline"}`}>{s.label}</span>
+                <span className="block text-[12px] text-[#8a8a8a]">{s.hint}</span>
               </span>
             </a>
           </li>

@@ -2,6 +2,7 @@
 
 import { requireAdmin } from "@/lib/supabase/admin-guard";
 import { siteSettingsSchema } from "@/lib/validation/schemas";
+import type { SiteSettingsRow } from "@/types/database";
 import { revalidatePublic } from "./revalidate";
 import { fail, type ActionResult } from "./types";
 
@@ -72,4 +73,45 @@ export async function exportContent(): Promise<ActionResult<string>> {
     site_settings: settings.data,
   };
   return { ok: true, data: JSON.stringify(snapshot, null, 2) };
+}
+
+type SettingsKey = keyof typeof siteSettingsSchema.shape;
+const JSON_KEYS: SettingsKey[] = ["focus_areas", "highlights", "journey"];
+const NULLABLE_KEYS: SettingsKey[] = ["github_url", "linkedin_url", "instagram_url"];
+
+/**
+ * Updates only the listed site_settings fields. Each admin page binds its own
+ * key list, so saving the Home page cannot clobber the About page and so on.
+ */
+export async function updateSiteFields(keys: SettingsKey[], _prev: ActionResult | undefined, formData: FormData): Promise<ActionResult> {
+  const { supabase } = await requireAdmin();
+  const raw: Record<string, unknown> = {};
+  for (const key of keys) {
+    const value = formData.get(key);
+    if (JSON_KEYS.includes(key)) {
+      try {
+        raw[key] = JSON.parse(typeof value === "string" && value ? value : "[]");
+      } catch {
+        return fail(`${key} is malformed.`);
+      }
+    } else {
+      raw[key] = typeof value === "string" ? value : "";
+    }
+  }
+  const picked = Object.fromEntries(keys.map((k) => [k, true])) as Record<SettingsKey, true>;
+  const parsed = siteSettingsSchema.pick(picked).safeParse(raw);
+  if (!parsed.success) {
+    const first = parsed.error.issues[0];
+    return fail(`${first?.path.join(".") ?? "field"}: ${first?.message ?? "invalid"}`);
+  }
+  const update: Record<string, unknown> = { ...parsed.data };
+  for (const k of NULLABLE_KEYS) if (k in update && !update[k]) update[k] = null;
+  if ("now_md" in update) {
+    const { data: current } = await supabase.from("site_settings").select("now_md").eq("id", true).single();
+    if (current?.now_md !== update.now_md) update.now_updated_at = new Date().toISOString();
+  }
+  const { error } = await supabase.from("site_settings").update(update as Partial<SiteSettingsRow>).eq("id", true);
+  if (error) return fail(error.message);
+  revalidatePublic();
+  return { ok: true, data: undefined, message: "Saved" };
 }

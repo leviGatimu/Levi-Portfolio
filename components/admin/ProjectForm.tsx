@@ -108,10 +108,10 @@ export function ProjectForm({ project, technologies }: Props) {
         <Notice tone={state.ok ? "success" : "danger"}>{state.ok ? (state.message ?? "Saved") : state.message}</Notice>
       ) : null}
 
-      <div className="sticky top-0 z-10 -mx-5 flex items-center justify-between gap-4 border-b border-rule bg-bg/95 px-5 py-3 sm:-mx-8 sm:px-8 lg:-mx-12 lg:px-12">
+      <div className="sticky top-2 z-10 flex items-center justify-between gap-4 rounded-full border border-black/[0.07] bg-white/95 px-4 py-2 backdrop-blur">
         <nav aria-label="Sections" className="hidden flex-wrap gap-x-5 md:flex">
           {["basics", "details", "technologies", "links", "case-study"].map((s) => (
-            <a key={s} href={`#${s}`} className="meta text-fg-muted hover:text-fg">{s.replace("-", " ")}</a>
+            <a key={s} href={`#${s}`} className="rounded-full px-3 py-1.5 text-[13px] font-medium capitalize text-[#555] hover:bg-[#f2f2f4] hover:text-[#111]">{s.replace("-", " ")}</a>
           ))}
         </nav>
         <Button type="submit" variant="primary" disabled={pending} aria-busy={pending}>

@@ -3,9 +3,9 @@
 import { useId, useMemo, useState } from "react";
 
 /* Palette: validated single-hue blue (series-1) on the light admin surface. */
-const SERIES = "#2a78d6";
-const GRID = "rgba(15, 23, 42, 0.08)";
-const TEXT_MUTED = "#64748b";
+const SERIES = "#111111";
+const GRID = "rgba(0, 0, 0, 0.07)";
+const TEXT_MUTED = "#8a8a8a";
 
 function niceMax(max: number) {
   if (max <= 5) return 5;
@@ -70,7 +70,7 @@ export function AreaChart({ data, label = "Views" }: { data: { day: string; view
         <title id={`${id}-title`}>{label} per day</title>
         <defs>
           <linearGradient id={`${id}-fill`} x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0" stopColor={SERIES} stopOpacity="0.16" />
+            <stop offset="0" stopColor={SERIES} stopOpacity="0.10" />
             <stop offset="1" stopColor={SERIES} stopOpacity="0.02" />
           </linearGradient>
         </defs>
@@ -95,15 +95,15 @@ export function AreaChart({ data, label = "Views" }: { data: { day: string; view
       </svg>
       {active ? (
         <div
-          className="pointer-events-none absolute -top-2 rounded-xl border border-black/[0.06] bg-white px-3 py-2 text-xs shadow-lg"
+          className="pointer-events-none absolute -top-2 rounded-xl border border-black/[0.08] bg-white px-3 py-2 text-xs shadow-lg"
           style={{ left: `${(active.x / W) * 100}%`, transform: `translateX(${active.x > W * 0.7 ? "-110%" : "10%"})` }}
           role="status"
         >
-          <span className="block text-base font-semibold text-slate-900">{active.views.toLocaleString()}</span>
-          <span className="text-slate-500">{label} · {shortDay(active.day)}</span>
+          <span className="block text-base font-semibold text-[#111]">{active.views.toLocaleString()}</span>
+          <span className="text-[#777]">{label} · {shortDay(active.day)}</span>
         </div>
       ) : null}
-      <details className="mt-3 text-xs text-slate-500">
+      <details className="mt-3 text-xs text-[#777]">
         <summary className="cursor-pointer font-semibold">Table view</summary>
         <table className="mt-2 w-full text-left">
           <thead><tr><th className="py-1 font-semibold">Day</th><th className="py-1 font-semibold">{label}</th></tr></thead>
@@ -125,14 +125,14 @@ export function BarList({ items, total, empty = "Nothing yet." }: { items: { lab
       {items.map((i) => (
         <li key={i.label} className="group" title={`${i.label}: ${i.value}`}>
           <div className="flex items-baseline justify-between gap-4 text-sm">
-            <span className="truncate font-medium text-slate-800">{i.label}</span>
-            <span className="shrink-0 tabular-nums text-slate-500">
-              <span className="font-semibold text-slate-900">{i.value.toLocaleString()}</span>
+            <span className="truncate font-medium text-[#333]">{i.label}</span>
+            <span className="shrink-0 tabular-nums text-[#777]">
+              <span className="font-semibold text-[#111]">{i.value.toLocaleString()}</span>
               {sum > 0 ? <span className="ml-1.5 text-xs">{Math.round((i.value / sum) * 100)}%</span> : null}
             </span>
           </div>
-          <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-slate-100">
-            <div className="h-full rounded-r-[4px] bg-[#2a78d6] transition-[width] duration-500 group-hover:brightness-110" style={{ width: `${(i.value / max) * 100}%` }} />
+          <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#eeeef0]">
+            <div className="h-full rounded-r-[4px] bg-[#111] transition-[width] duration-500 group-hover:opacity-80" style={{ width: `${(i.value / max) * 100}%` }} />
           </div>
         </li>
       ))}
@@ -142,20 +142,23 @@ export function BarList({ items, total, empty = "Nothing yet." }: { items: { lab
 
 /* ---------- Stat tile ---------- */
 
-export function StatTile({ label, value, hint, delta }: { label: string; value: string | number; hint?: string; delta?: number | null }) {
+export function StatTile({ label, value, hint, delta, icon }: { label: string; value: string | number; hint?: string; delta?: number | null; icon?: React.ReactNode }) {
   const up = typeof delta === "number" && delta > 0;
   const down = typeof delta === "number" && delta < 0;
   return (
-    <div className="rounded-2xl border border-black/[0.06] bg-white p-5 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.35)]">
-      <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">{label}</p>
-      <p className="mt-2 font-display text-3xl font-semibold text-slate-900">{typeof value === "number" ? value.toLocaleString() : value}</p>
-      {typeof delta === "number" ? (
-        <p className={`mt-1 text-xs font-semibold ${up ? "text-emerald-600" : down ? "text-rose-600" : "text-slate-400"}`}>
-          {up ? "▲" : down ? "▼" : "•"} {Math.abs(delta)}% vs previous period
-        </p>
-      ) : hint ? (
-        <p className="mt-1 text-xs text-slate-500">{hint}</p>
-      ) : null}
+    <div className="flex items-start gap-4 rounded-[18px] border border-black/[0.07] bg-white p-5">
+      {icon ? <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-black/[0.1] text-[#333]">{icon}</span> : null}
+      <div className="min-w-0">
+        <p className="text-[12px] font-medium text-[#777]">{label}</p>
+        <p className="mt-1 text-[26px] font-semibold leading-none tracking-tight text-[#111]">{typeof value === "number" ? value.toLocaleString() : value}</p>
+        {typeof delta === "number" ? (
+          <p className={`mt-1.5 text-[12px] font-medium ${up ? "text-emerald-600" : down ? "text-red-600" : "text-[#8a8a8a]"}`}>
+            {up ? "▲" : down ? "▼" : "•"} {Math.abs(delta)}% vs previous period
+          </p>
+        ) : hint ? (
+          <p className="mt-1.5 text-[12px] text-[#8a8a8a]">{hint}</p>
+        ) : null}
+      </div>
     </div>
   );
 }

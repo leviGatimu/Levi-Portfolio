@@ -15,16 +15,16 @@
   --color-canvas-dark: #0a0e17;
 
   /* Admin (private) palette: light, matching the public site. Only used under /admin. */
-  --color-bg: #ececec;
+  --color-bg: #f7f7f8;
   --color-bg-raised: #ffffff;
-  --color-bg-sunken: #f4f4f5;
-  --color-bg-deep: #0f172a;
-  --color-fg: #0f172a;
-  --color-fg-muted: #475569;
-  --color-fg-subtle: #64748b;
-  --color-rule: rgba(15, 23, 42, 0.08);
-  --color-rule-strong: rgba(15, 23, 42, 0.14);
-  --color-accent: #2563eb;
+  --color-bg-sunken: #f2f2f4;
+  --color-bg-deep: #111111;
+  --color-fg: #111111;
+  --color-fg-muted: #555555;
+  --color-fg-subtle: #8a8a8a;
+  --color-rule: rgba(0, 0, 0, 0.07);
+  --color-rule-strong: rgba(0, 0, 0, 0.12);
+  --color-accent: #111111;
   --color-accent-ink: #ffffff;
   --color-danger: #dc2626;
   --color-success: #059669;
@@ -330,11 +330,9 @@
 
 @utility meta {
   font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: var(--text-meta);
-  line-height: var(--text-meta--line-height);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.4;
   font-variant-numeric: tabular-nums;
 }
 @utility meta-lg {
