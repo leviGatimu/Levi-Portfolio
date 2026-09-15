@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: "Work",
   description: "Selected software, AI and robotics projects by Levi Gatimu, student developer in Kigali.",
   alternates: { canonical: "/work" },
-  openGraph: { type: "website", url: "/work", title: "Work — Levi Gatimu" },
+  openGraph: { type: "website", url: "/work", title: "Work · Levi Gatimu" },
 };
 
 const FILTERS: { key: ProjectType | "all"; label: string }[] = [
@@ -30,7 +30,7 @@ export default async function WorkPage({ searchParams }: { searchParams: Promise
   const current = filtered.filter((p) => p.status !== "archived");
   const archived = filtered.filter((p) => p.status === "archived");
   const years = all.map((p) => p.year);
-  const range = years.length ? `${Math.min(...years)}–${Math.max(...years)}` : "";
+  const range = years.length ? `${Math.min(...years)} to ${Math.max(...years)}` : "";
 
   return (
     <div className="container-site py-14 lg:py-20">

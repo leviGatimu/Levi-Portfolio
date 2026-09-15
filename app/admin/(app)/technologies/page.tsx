@@ -18,7 +18,7 @@ export default async function TechnologiesPage() {
     <div>
       <h1 className="font-mono text-display-md font-medium text-fg">Technologies</h1>
       <p className="mt-2 max-w-[60ch] text-small text-fg-muted">
-        The shared list used by the project picker. Levels appear on the About page — rate honestly, or leave blank to keep a technology off About.
+        The shared list used by the project picker. Levels appear on the About page. Rate honestly, or leave blank to keep a technology off About.
       </p>
       <div className="mt-8">
         <TechnologiesAdmin technologies={(techs ?? []) as TechnologyRow[]} usage={usage} />

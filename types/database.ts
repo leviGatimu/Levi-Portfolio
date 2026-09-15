@@ -100,6 +100,7 @@ export type SiteSettingsRow = {
   now_md: string;
   now_updated_at: string | null;
   focus_areas: FocusArea[];
+  highlights: FocusArea[];
   email: string;
   github_url: string | null;
   linkedin_url: string | null;

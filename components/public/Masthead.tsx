@@ -28,7 +28,7 @@ export function Masthead({ displayName, email, githubUrl, linkedinUrl }: Props) 
   return (
     <header className="sticky top-0 z-10 bg-bg/95 backdrop-blur-[2px]">
       <div className="container-site flex h-16 items-center justify-between gap-6">
-        <Link href="/" className="font-mono text-[0.9375rem] tracking-tight text-fg" aria-label={`${displayName} — home`}>
+        <Link href="/" className="font-mono text-[0.9375rem] tracking-tight text-fg" aria-label={`${displayName}, home`}>
           <span className="font-semibold">{first}</span>
           {rest.length ? <span className="font-normal text-fg-muted"> {rest.join(" ")}</span> : null}
         </Link>

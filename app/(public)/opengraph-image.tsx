@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getSiteSettings } from "@/lib/db/public";
 
-export const alt = "Levi Gatimu — Student developer";
+export const alt = "Levi Gatimu, student developer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const revalidate = 3600;

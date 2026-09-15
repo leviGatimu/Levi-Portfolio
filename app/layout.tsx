@@ -20,7 +20,7 @@ const plexSans = IBM_Plex_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: "Levi Gatimu — Student developer", template: "%s — Levi Gatimu" },
+  title: { default: "Levi Gatimu, student developer", template: "%s · Levi Gatimu" },
   description: "Student developer in Kigali building full-stack software, AI systems and robotics.",
 };
 

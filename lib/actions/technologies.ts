@@ -58,7 +58,7 @@ export async function updateTechnology(id: string, _prev: ActionResult | undefin
 export async function deleteTechnology(id: string): Promise<ActionResult> {
   const { supabase } = await requireAdmin();
   const { count } = await supabase.from("project_technologies").select("project_id", { count: "exact", head: true }).eq("technology_id", id);
-  if ((count ?? 0) > 0) return fail(`Used by ${count} project${count === 1 ? "" : "s"} — remove it from them first.`);
+  if ((count ?? 0) > 0) return fail(`Used by ${count} project${count === 1 ? "" : "s"}. Remove it from them first.`);
   const { error } = await supabase.from("technologies").delete().eq("id", id);
   if (error) return fail(error.message);
   revalidatePublic();

@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     openGraph: {
       type: "article",
       url: `/work/${project.slug}`,
-      title: `${project.name} — Levi Gatimu`,
+      title: `${project.name} · Levi Gatimu`,
       description,
       publishedTime: project.published_at ?? undefined,
       modifiedTime: project.updated_at,

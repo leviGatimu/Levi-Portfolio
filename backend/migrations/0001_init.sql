@@ -152,7 +152,7 @@ create table if not exists public.site_settings (
   tagline              text not null default 'Student Developer · Full-Stack · AI · Robotics',
   meta_line            text not null default 'STUDENT DEVELOPER · NGA CODING ACADEMY, YEAR 2 · KIGALI, RWANDA',
   meta_line_secondary  text not null default '',
-  opening_statement    text not null default 'I build software, AI systems and robots — and finish them.',
+  opening_statement    text not null default 'I build software, AI systems and robots, and I finish them.',
   intro_line           text not null default 'I design and build things that actually work, and I like the whole journey from idea to shipped.',
   bio_short_md         text not null default '',
   bio_long_md          text not null default '',

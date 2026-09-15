@@ -316,6 +316,107 @@
 }
 .prose img { max-width: 100%; height: auto; border-radius: 4px; }
 
+
+/* ---------- Keyframe animations ---------- */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(110%) rotate(2deg); }
+  to   { opacity: 1; transform: translateY(0) rotate(0); }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent) 60%, transparent); }
+  70%      { box-shadow: 0 0 0 10px transparent; }
+}
+
+/* Word-by-word headline reveal: each word is clipped and rises into place. */
+@utility word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+@utility word-rise {
+  display: inline-block;
+  animation: rise 0.9s var(--ease-out-quart) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 120ms);
+}
+@utility anim-fade-up {
+  animation: fade-up 0.8s var(--ease-out-quart) both;
+  animation-delay: var(--delay, 0ms);
+}
+@utility anim-fade-in {
+  animation: fade-in 0.8s ease-out both;
+  animation-delay: var(--delay, 0ms);
+}
+@utility anim-scale-in {
+  animation: scale-in 1s var(--ease-out-quart) both;
+  animation-delay: var(--delay, 0ms);
+}
+@utility anim-float {
+  animation: float 5s ease-in-out infinite;
+  animation-delay: var(--delay, 0ms);
+}
+@utility pulse-dot {
+  animation: pulse-dot 2.4s ease-out infinite;
+}
+
+/* Infinite technology marquee: the track holds the list twice. */
+@utility marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+  &:hover { animation-play-state: paused; }
+}
+
+/* Staggered children reveal (used with .reveal on a parent) */
+.reveal-stagger > * {
+  transition: opacity var(--duration-slow) var(--ease-out-quart), transform var(--duration-slow) var(--ease-out-quart);
+  transition-delay: calc(var(--n, 0) * 90ms);
+}
+.reveal-stagger[data-reveal="pending"] > * {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Accent hairline that grows in under section titles */
+@utility grow-line {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.5rem;
+    height: 1px;
+    width: 2.5rem;
+    background: var(--color-accent);
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform var(--duration-slow) var(--ease-out-quart) 200ms;
+  }
+}
+.reveal:not([data-reveal="pending"]) .grow-line::after,
+.grow-line[data-grown]::after { transform: scaleX(1); }
+
 /* ---------- Motion accessibility ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -326,6 +427,10 @@
     transition-property: opacity, background-color, color, border-color, background-size !important;
   }
   .reveal[data-reveal="pending"] { transform: none; }
+  .reveal-stagger[data-reveal="pending"] > * { transform: none; }
+  .marquee { animation: none; flex-wrap: wrap; width: auto; }
+  .word-rise, .anim-fade-up, .anim-fade-in, .anim-scale-in { animation: none; opacity: 1; transform: none; }
+  .anim-float, .pulse-dot { animation: none; }
 }
 
 /* ---------- Print ---------- */

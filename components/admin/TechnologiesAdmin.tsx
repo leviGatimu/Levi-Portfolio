@@ -33,7 +33,7 @@ export function TechnologiesAdmin({ technologies, usage }: Props) {
           </Field>
           <Field label="Level" htmlFor="new-level" help="Blank = not shown on About">
             <Select id="new-level" name="proficiency" defaultValue="">
-              <option value="">—</option>
+              <option value="">None</option>
               {LEVELS.map((l) => <option key={l} value={l}>{PROFICIENCY_LABEL[l]}</option>)}
             </Select>
           </Field>
@@ -99,7 +99,7 @@ function TechRow({ tech, used, isFirst, isLast }: { tech: TechnologyRow; used: n
         </Field>
         <Field label="Level" htmlFor={`level-${tech.id}`}>
           <Select id={`level-${tech.id}`} name="proficiency" defaultValue={tech.proficiency ?? ""}>
-            <option value="">—</option>
+            <option value="">None</option>
             {LEVELS.map((l) => <option key={l} value={l}>{PROFICIENCY_LABEL[l]}</option>)}
           </Select>
         </Field>

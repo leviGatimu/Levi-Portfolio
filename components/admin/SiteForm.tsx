@@ -13,6 +13,7 @@ import { Button, Field, Fieldset, Input, Notice, Textarea } from "./ui";
 export function SiteForm({ settings }: { settings: SiteSettingsRow }) {
   const [state, action, pending] = useActionState(updateSiteSettings, undefined);
   const [focus, setFocus] = useState<FocusArea[]>(settings.focus_areas);
+  const [highlights, setHighlights] = useState<FocusArea[]>(settings.highlights ?? []);
 
   return (
     <form action={action} className="flex flex-col gap-12">
@@ -53,6 +54,20 @@ export function SiteForm({ settings }: { settings: SiteSettingsRow }) {
           ))}
         </ul>
         <Button size="sm" onClick={() => setFocus([...focus, { title: "", description: "" }])} disabled={focus.length >= 4}>+ Add focus area</Button>
+      </Fieldset>
+
+      <Fieldset legend="Beyond software" description="The three highlight panels on the homepage (leadership, robotics, aviation).">
+        <input type="hidden" name="highlights" value={JSON.stringify(highlights)} />
+        <ul className="flex flex-col gap-3">
+          {highlights.map((f, i) => (
+            <li key={i} className="grid gap-2 sm:grid-cols-[200px_1fr_auto]">
+              <Input aria-label="Highlight title" placeholder="Title" value={f.title} onChange={(e) => setHighlights(highlights.map((x, j) => (j === i ? { ...x, title: e.target.value } : x)))} maxLength={40} />
+              <Input aria-label="Highlight description" placeholder="One sentence" value={f.description} onChange={(e) => setHighlights(highlights.map((x, j) => (j === i ? { ...x, description: e.target.value } : x)))} maxLength={160} />
+              <Button variant="ghost" onClick={() => setHighlights(highlights.filter((_, j) => j !== i))} aria-label="Remove highlight">✕</Button>
+            </li>
+          ))}
+        </ul>
+        <Button size="sm" onClick={() => setHighlights([...highlights, { title: "", description: "" }])} disabled={highlights.length >= 4}>+ Add highlight</Button>
       </Fieldset>
 
       <Fieldset legend="Bio" description="Markdown. Short bio appears on the homepage; long bio on About.">

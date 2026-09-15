@@ -15,7 +15,7 @@ export function PublishPanel({ project }: { project: ProjectWithRelations }) {
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
   return (
-    <Fieldset legend="Publish" description="Drafts are invisible to visitors. Publishing is checked against the rules below — the panel reflects the last saved version.">
+    <Fieldset legend="Publish" description="Drafts are invisible to visitors. Publishing is checked against the rules below; the panel reflects the last saved version.">
       {blockers.length > 0 ? (
         <Notice tone="danger">
           <p className="meta mb-2">Blocks publishing</p>
@@ -38,7 +38,7 @@ export function PublishPanel({ project }: { project: ProjectWithRelations }) {
           <ActionButton action={() => publishProject(project.id)} variant="primary" disabled={blockers.length > 0}>Publish</ActionButton>
         )}
         <ActionButton action={() => setFeatured(project.id, !project.is_featured)} aria-pressed={project.is_featured}>
-          {project.is_featured ? "★ Featured — remove" : "☆ Mark as featured"}
+          {project.is_featured ? "★ Featured (remove)" : "☆ Mark as featured"}
         </ActionButton>
         <Link href={`/admin/preview/${project.id}`} target="_blank" className="meta text-fg-muted hover:text-fg">
           Preview draft <span aria-hidden="true">↗</span>

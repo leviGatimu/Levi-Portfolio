@@ -27,8 +27,8 @@ client → API → database
 \`\`\`
 
 ## Decisions
-- Decision one — and *why*.
-- Decision two — and why.
+- Decision one, and *why*.
+- Decision two, and why.
 
 ## Challenges
 What broke, what was hard.
@@ -152,7 +152,7 @@ export function ProjectForm({ project, technologies }: Props) {
           <Field label="Year" htmlFor="year" error={errors.year}>
             <Input id="year" name="year" type="number" min={2020} max={2100} defaultValue={project.year} />
           </Field>
-          <Field label="Timeline" htmlFor="timeline" help="e.g. May–Sep 2026" error={errors.timeline}>
+          <Field label="Timeline" htmlFor="timeline" help="e.g. May to Sep 2026" error={errors.timeline}>
             <Input id="timeline" name="timeline" defaultValue={project.timeline ?? ""} maxLength={60} />
           </Field>
         </div>
@@ -169,11 +169,11 @@ export function ProjectForm({ project, technologies }: Props) {
         <Field label="One-liner" htmlFor="one_liner" required count={{ value: oneLiner.length, max: 120 }} error={errors.one_liner} help="Shown under the name on the homepage and /work.">
           <Input id="one_liner" name="one_liner" value={oneLiner} onChange={(e) => setOneLiner(e.target.value)} maxLength={140} />
         </Field>
-        <Field label="Summary" htmlFor="summary" required count={{ value: summary.length, max: 400 }} error={errors.summary} help="2–3 sentences. Used as the meta description and the case-study sidebar.">
+        <Field label="Summary" htmlFor="summary" required count={{ value: summary.length, max: 400 }} error={errors.summary} help="2 to 3 sentences. Used as the meta description and the case-study sidebar.">
           <Textarea id="summary" name="summary" value={summary} onChange={(e) => setSummary(e.target.value)} maxLength={450} />
         </Field>
         <div className="grid gap-6 sm:grid-cols-2">
-          <Field label="Role" htmlFor="role" required help="What you did. e.g. Solo — design, frontend, backend." error={errors.role}>
+          <Field label="Role" htmlFor="role" required help="What you did. e.g. Solo: design, frontend, backend." error={errors.role}>
             <Input id="role" name="role" defaultValue={project.role} maxLength={120} />
           </Field>
           <Field label="Team" htmlFor="team" required help="Solo, or who you worked with (real names only with permission)." error={errors.team}>

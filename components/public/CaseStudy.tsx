@@ -46,13 +46,13 @@ export function CaseStudy({ project, next, position, preview = false }: Props) {
   const video = project.video_url ? embedUrl(project.video_url) : null;
 
   const meta: { label: string; value: React.ReactNode }[] = [
-    { label: "Role", value: project.role || "—" },
-    { label: "Team", value: project.team || "—" },
+    { label: "Role", value: project.role || "Not specified" },
+    { label: "Team", value: project.team || "Not specified" },
     { label: "Timeline", value: project.timeline || String(project.year) },
     { label: "Status", value: STATUS_LABEL[project.status] },
     {
       label: "Stack",
-      value: techs.length ? techs.map((t) => t.name).join(" · ") : "—",
+      value: techs.length ? techs.map((t) => t.name).join(" · ") : "Not specified",
     },
   ];
 
@@ -60,7 +60,7 @@ export function CaseStudy({ project, next, position, preview = false }: Props) {
     <article className="container-site py-12 lg:py-20">
       {preview ? (
         <div className="no-print mb-8 flex items-center justify-between rounded-[3px] bg-accent px-4 py-2 font-mono text-xs text-accent-ink">
-          <span>Preview — this is a draft, visible only to you</span>
+          <span>Preview: this is a draft, visible only to you</span>
           <Link href={`/admin/projects/${project.id}`} className="underline">Back to editor</Link>
         </div>
       ) : null}
@@ -126,7 +126,7 @@ export function CaseStudy({ project, next, position, preview = false }: Props) {
 
       {video ? (
         <div className="mt-8 aspect-video overflow-hidden rounded-[4px] bg-bg-sunken">
-          <iframe src={video} title={`${project.name} — video`} className="h-full w-full" allow="accelerometer; encrypted-media; picture-in-picture" allowFullScreen loading="lazy" />
+          <iframe src={video} title={`${project.name} video`} className="h-full w-full" allow="accelerometer; encrypted-media; picture-in-picture" allowFullScreen loading="lazy" />
         </div>
       ) : project.video_url ? (
         <p className="mt-6">

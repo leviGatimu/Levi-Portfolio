@@ -77,6 +77,7 @@ export const siteSettingsSchema = z.object({
   bio_long_md: z.string().max(20_000),
   now_md: z.string().max(2000),
   focus_areas: z.array(focusAreaSchema).max(4),
+  highlights: z.array(focusAreaSchema).max(4),
   email: z.string().trim().email(),
   github_url: z.union([httpUrl, z.literal("")]),
   linkedin_url: z.union([httpUrl, z.literal("")]),
@@ -126,7 +127,7 @@ export function getPublishWarnings(
 ): string[] {
   const warnings: string[] = [];
   if (project.links.length === 0) warnings.push("No links (repository, live site…)");
-  if (imageCount <= 1) warnings.push("Only one image — case studies read better with 3–6");
+  if (imageCount <= 1) warnings.push("Only one image; case studies read better with 3 to 6");
   if (project.status === "completed" && !/^##\s+Outcome/im.test(project.body_md)) warnings.push("Completed project without an “## Outcome” section");
   if (!/^##\s+/m.test(project.body_md)) warnings.push("Case study has no “## Section” headings");
   return warnings;

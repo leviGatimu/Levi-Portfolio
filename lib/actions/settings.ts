@@ -9,10 +9,12 @@ export async function updateSiteSettings(_prev: ActionResult | undefined, formDa
   const { supabase } = await requireAdmin();
 
   let focus_areas: unknown = [];
+  let highlights: unknown = [];
   try {
     focus_areas = JSON.parse(String(formData.get("focus_areas") ?? "[]"));
+    highlights = JSON.parse(String(formData.get("highlights") ?? "[]"));
   } catch {
-    return fail("Focus areas are malformed.");
+    return fail("Focus areas or highlights are malformed.");
   }
 
   const fields = [
@@ -20,7 +22,7 @@ export async function updateSiteSettings(_prev: ActionResult | undefined, formDa
     "bio_short_md", "bio_long_md", "now_md", "email", "github_url", "linkedin_url", "instagram_url",
     "portrait_alt", "location", "timezone",
   ] as const;
-  const raw: Record<string, unknown> = { focus_areas };
+  const raw: Record<string, unknown> = { focus_areas, highlights };
   for (const f of fields) raw[f] = formData.get(f) ?? "";
 
   const parsed = siteSettingsSchema.safeParse(raw);

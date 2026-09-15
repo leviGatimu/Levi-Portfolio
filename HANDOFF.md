@@ -13,7 +13,7 @@ Solved (V1 code complete) — 2026-09-15. `npm run build`, `typecheck`, `lint` a
 - [x] Public site: home (hero, latest works panels, introduce, contact), `/work` (+ filters, archive), `/work/[slug]` case study (metadata, hero, markdown narrative, gallery, video embed, next), `/about` (bio, focus, skills with levels, now), 404, sitemap, robots, OG images, JSON-LD
 - [x] Admin: login (rate-limited), proxy + `requireAdmin` + RLS, projects list (search/filter/reorder/feature/publish), project editor (all fields, tech picker with quick-add, links, collaborators, markdown with template + preview), image upload (sniff/size/dimension checks, EXIF strip, UUID paths, cover/gallery/wide/caption/reorder/delete, copy Markdown), publish validation panel, delete with name confirmation, technologies CRUD, site settings + portraits + JSON export, draft preview route
 - [x] Migrations 0001–0003 applied by Levi (verified via REST 2026-09-15); auth user getmorelev@gmail.com created
-- [ ] Levi: run `backend/migrations/0004_admin_user.sql` (UID pre-filled), then log in, add projects and the portrait
+- [ ] Levi: run `backend/migrations/0004_admin_user.sql` (UID pre-filled) and `0005_site_copy.sql`, then log in and add projects
 - [ ] Levi: connect the repo to Vercel with the three env vars (`NEXT_PUBLIC_SITE_URL` = the `*.vercel.app` URL)
 - [ ] Nice-to-have later: e2e tests (Playwright is installed as `playwright-core`; `scripts/screenshot.mjs` drives the system Edge), Lighthouse pass with real content, TOTP MFA
 
@@ -29,5 +29,6 @@ Solved (V1 code complete) — 2026-09-15. `npm run build`, `typecheck`, `lint` a
 - Next step on resume: if migrations are applied, log in at `/admin/login`, create a real project end-to-end (upload → publish) and confirm it appears on `/`; then deploy to Vercel and run Lighthouse on the preview URL.
 
 ## Recently Completed
+- 2026-09-15 (late): fixed client crash (NEXT_PUBLIC_ env read dynamically), cutout portrait from image.svg in the hero, word-reveal/count-up/marquee/tilt animations, richer home (intro bio, How I work, Beyond software), all em dashes removed, migration 0005 for descriptive copy.
 - 2026-09-15: V1 implementation — public site, admin CMS, migrations, README.
 - 2026-09-15: Phase 0 planning and documentation.

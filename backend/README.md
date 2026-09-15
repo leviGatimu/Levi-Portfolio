@@ -14,6 +14,7 @@ Supabase Dashboard → **SQL Editor** → **New query** → paste the file → *
 | 2 | `migrations/0002_storage.sql` | Creates the public `media` bucket (5 MB per file, images only) and its policies |
 | 3 | `migrations/0003_seed_technologies.sql` | Starter technology list for the picker (optional; edit later in the admin) |
 | 4 | `migrations/0004_admin_user.sql` | Makes the dashboard user the admin (UID already filled in) |
+| 5 | `migrations/0005_site_copy.sql` | Adds the "Beyond software" highlights and fills in the descriptive bio, intro and now text (all editable in Admin > Site) |
 
 All three are safe to run again if something goes wrong halfway.
 
@@ -45,6 +46,7 @@ Create `migrations/0004_something.sql`, write idempotent SQL (`create table if n
 | 0002_storage.sql | 2026-09-15 |
 | 0003_seed_technologies.sql | 2026-09-15 |
 | 0004_admin_user.sql | |
+| 0005_site_copy.sql | |
 
 ## Keys
 

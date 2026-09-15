@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: "About",
   description: "Who Levi Gatimu is: Year 2 student at NGA Coding Academy in Kigali, building software, AI systems and robotics, heading for a career in aviation.",
   alternates: { canonical: "/about" },
-  openGraph: { type: "profile", url: "/about", title: "About — Levi Gatimu" },
+  openGraph: { type: "profile", url: "/about", title: "About · Levi Gatimu" },
 };
 
 const GROUP_ORDER: TechGroup[] = ["language", "frontend", "backend", "database", "ai", "robotics", "embedded", "desktop", "devops", "design", "hardware"];
@@ -81,7 +81,7 @@ export default async function AboutPage() {
         {grouped.size > 0 ? (
           <Reveal className="mt-20 lg:mt-28">
             <div className="border-t border-rule pt-8">
-              <span className="meta text-fg-subtle">Skills — honestly rated</span>
+              <span className="meta text-fg-subtle">Skills, honestly rated</span>
               <p className="mt-3 max-w-[60ch] text-small text-fg-muted">
                 Strong: shipped it more than once. Comfortable: used it in a real project. Learning: coursework or partial use. Experimental: touched, not shipped.
               </p>
@@ -104,7 +104,7 @@ export default async function AboutPage() {
           </Reveal>
         ) : null}
       </div>
-      <Contact settings={settings} index="—" />
+      <Contact settings={settings} index="03" />
     </>
   );
 }

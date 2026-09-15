@@ -16,7 +16,7 @@ type Props = {
 
 /**
  * The project card: a raised panel with the name and stack at the top and the
- * real screenshot pinned to the bottom edge, cropped by the panel — the whole
+ * real screenshot pinned to the bottom edge, cropped by the panel; the whole
  * panel is one link to the case study.
  */
 export function ProjectPanel({ project, accentTitle = false, size = "default", priority = false, className }: Props) {

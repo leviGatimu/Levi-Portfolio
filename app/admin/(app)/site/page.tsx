@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export default async function SitePage() {
   const { supabase } = await requireAdmin();
   const { data, error } = await supabase.from("site_settings").select("*").eq("id", true).single();
-  if (error) throw new Error(`site_settings: ${error.message} — did you run backend/migrations/0001_init.sql?`);
+  if (error) throw new Error(`site_settings: ${error.message}. Did you run backend/migrations/0001_init.sql?`);
   const settings = data as SiteSettingsRow;
 
   return (
@@ -18,7 +18,7 @@ export default async function SitePage() {
       <div className="mt-10 flex flex-col gap-12">
         <SiteForm settings={settings} />
         <PortraitSection settings={settings} />
-        <Fieldset legend="Maintenance" description="Download a JSON snapshot of all content before risky changes. Images are not included — they stay in Supabase Storage.">
+        <Fieldset legend="Maintenance" description="Download a JSON snapshot of all content before risky changes. Images are not included; they stay in Supabase Storage.">
           <ExportButton />
         </Fieldset>
       </div>
