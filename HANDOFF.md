@@ -1,10 +1,10 @@
 # HANDOFF
 
 ## Current Task
-Build the portfolio (public site + private admin) on Next.js 16 + Supabase, based directly on the Dribbble reference, with SQL migrations Levi runs himself.
+Project page cover image: was cropped by object-cover in a fixed 16:9 box and not clickable.
 
 ## Status
-Solved (V1 code complete) — 2026-09-15. `npm run build`, `typecheck`, `lint` all pass. Public routes and admin auth redirects verified against the production build; homepage, project panels, case study and admin markup verified via headless screenshots. **The Supabase schema has not been applied yet** — Levi runs `backend/migrations/*.sql` (see `backend/README.md`), creates the admin user, and adds it to `public.admins`. Until then the public site renders its empty shell with a `[db] schema not found` console warning, and `/admin` login cannot succeed.
+Solved. Cover now renders at natural aspect inside a browser-style frame (`CoverFrame`) and opens the shared lightbox as image 1; gallery thumbnails use object-contain and continue from index 1. Old `Gallery.tsx` deleted in favour of `components/public/Lightbox.tsx` (LightboxProvider + CoverFrame + GalleryGrid).
 
 ## Progress
 - [x] Phase 0 planning docs (`docs/`)
@@ -19,17 +19,10 @@ Solved (V1 code complete) — 2026-09-15. `npm run build`, `typecheck`, `lint` a
 - [ ] Nice-to-have later: e2e tests (Playwright is installed as `playwright-core`; `scripts/screenshot.mjs` drives the system Edge), Lighthouse pass with real content, TOTP MFA
 
 ## Working Notes
-- Env: `.env.local` holds `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_SITE_URL`. Only the publishable key is ever used.
-- Design in code (D27): the public site is a port of Levi's Study Tracker landing design (light canvas, Clash fonts via Fontshare, blue accent, white blob cards, draggable hero cards, Lenis, custom cursor, dark-mode toggle, SandText footer). Components in `components/public/`. Admin keeps a dark palette via `.admin-scope`. Earlier design docs are historical.
-- Data flow: public pages use the cookie-less client (`lib/supabase/public.ts`) and are ISR (1h); every admin write calls `revalidatePublic()` (`lib/actions/revalidate.ts`). Admin uses `@supabase/ssr` cookies; `proxy.ts` redirects, `requireAdmin()` + RLS enforce.
-- `mediaUrl()` returns absolute paths/URLs unchanged (used by fixtures); storage paths become public bucket URLs.
-- `types/database.ts` is hand-written — update it when a migration changes the schema (Relationships are needed for embedded selects to type-check).
-- Verified: `next build` passes with the schema missing; routes `/`, `/work`, `/about`, `/work/[slug]` (404 for unknown), `/admin` → login redirect, sitemap, robots, OG image 1200×630. Headless checks showed no horizontal overflow at 390 and 1440.
-- Known: `Reveal` hides below-fold blocks until intersection with a 2s fallback; full-page screenshot tools should scroll first (`scripts/screenshot.mjs` does).
-- Tooling: multi-file bash heredocs sometimes fail to parse in this environment — write source files with the Write tool or one file per heredoc.
-- Next step on resume: if migrations are applied, log in at `/admin/login`, create a real project end-to-end (upload → publish) and confirm it appears on `/`; then deploy to Vercel and run Lighthouse on the preview URL.
+Verify with `node scripts/check-cover.mjs` (needs `npx next start -p 3123`): asserts scrollY 0, cover rendered at natural ratio, click opens viewer 1/N, arrows and Esc work. `cover_aspect` on projects is no longer used for layout (portrait detection is from image dimensions).
 
 ## Recently Completed
+- Project cover: uncropped browser-frame hero, clickable into shared lightbox with gallery.
 - 2026-09-16: admin recoloured blue/white and de-framed; project page: Lenis scroll reset on route change (was landing at the footer), smaller 16:9 hero, Gallery with full-screen lightbox (arrows, keyboard, swipe).
 - 2026-09-16: admin rebuilt in the monochrome reference style (D29): grouped sidebar, header with search/Add/user menu, breadcrumbs, icon-circle cards; new pages Skills, Journey, Home, About, Now, Contact, Profile, Site settings; field-scoped settings saves.
 - 2026-09-15: technology logos everywhere (Simple Icons CDN via `TechLogo`, `technologies.icon` column, migration 0007), home Toolbox logo wall, logos on cards, case studies, Skills and About.

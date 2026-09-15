@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, Lock } from "lucide-react";
 import type { ProjectWithRelations } from "@/types/database";
@@ -7,7 +6,7 @@ import { coverOf, techsOf } from "@/lib/db/public";
 import { mediaUrl } from "@/lib/supabase/env";
 import { STATUS_LABEL, TYPE_LABEL } from "@/lib/utils/format";
 import { TechLogo } from "@/components/shared/TechLogo";
-import { Gallery } from "./Gallery";
+import { CoverFrame, GalleryGrid, LightboxProvider, type LightboxImage } from "./Lightbox";
 import { ProjectCard } from "./ProjectCard";
 import ScrollReveal from "./ScrollReveal";
 
@@ -35,9 +34,11 @@ export function CaseStudy({ project, next, position, preview = false }: Props) {
   const cover = coverOf(project);
   const techs = techsOf(project);
   const bodyImages: ImageDimensions = Object.fromEntries(project.project_images.map((i) => [mediaUrl(i.storage_path), { width: i.width, height: i.height, alt: i.alt }]));
-  const gallery = project.project_images
-    .filter((i) => !i.is_cover)
-    .map((i) => ({ id: i.id, src: mediaUrl(i.storage_path), alt: i.alt, caption: i.caption, width: i.width, height: i.height }));
+  const toImage = (i: (typeof project.project_images)[number]): LightboxImage => ({ id: i.id, src: mediaUrl(i.storage_path), alt: i.alt, caption: i.caption, width: i.width, height: i.height });
+  const coverImage = cover ? toImage(cover) : null;
+  const gallery = project.project_images.filter((i) => !i.is_cover).map(toImage);
+  // One viewer for the whole page: the cover is image 1, the gallery follows.
+  const allImages = coverImage ? [coverImage, ...gallery] : gallery;
   const video = project.video_url ? embedUrl(project.video_url) : null;
 
   const meta = [
@@ -48,6 +49,7 @@ export function CaseStudy({ project, next, position, preview = false }: Props) {
   ];
 
   return (
+    <LightboxProvider images={allImages}>
     <article className="relative">
       <div className="grain" />
       {preview ? (
@@ -103,16 +105,14 @@ export function CaseStudy({ project, next, position, preview = false }: Props) {
         </div>
       </section>
 
-      {/* Hero image */}
-      {cover ? (
+      {/* Hero image: full screenshot, no cropping, click to enlarge */}
+      {coverImage ? (
         <section className="px-6 pb-8">
           <ScrollReveal className="relative mx-auto max-w-5xl">
             <div className="absolute -inset-4 -z-10 rounded-[2.5rem] bg-blue-300/30 blur-2xl dark:bg-blue-600/20" />
             <figure>
-              <div className={`relative overflow-hidden rounded-[1.75rem] border border-black/[0.06] bg-white shadow-[0_40px_80px_-40px_rgba(15,23,42,0.5)] dark:border-white/10 ${project.cover_aspect === "4:5" ? "mx-auto aspect-[4/5] max-w-[440px]" : "aspect-[16/9]"}`}>
-                <Image src={mediaUrl(cover.storage_path)} alt={cover.alt} fill priority sizes="(min-width: 1024px) 1024px, 100vw" className="object-cover object-top" />
-              </div>
-              {cover.caption ? <figcaption className="mt-4 text-center text-sm text-slate-400">{cover.caption}</figcaption> : null}
+              <CoverFrame image={coverImage} index={0} />
+              {coverImage.caption ? <figcaption className="mt-4 text-center text-sm text-slate-400">{coverImage.caption}</figcaption> : null}
             </figure>
           </ScrollReveal>
         </section>
@@ -160,7 +160,22 @@ export function CaseStudy({ project, next, position, preview = false }: Props) {
         </div>
       </section>
 
-      <Gallery images={gallery} />
+      {gallery.length > 0 ? (
+        <section aria-label="Gallery" className="px-6 pb-16">
+          <ScrollReveal className="mx-auto max-w-7xl">
+            <div className="flex items-end justify-between gap-6">
+              <div>
+                <span className="eyebrow">Gallery</span>
+                <h2 className="mt-4 font-display text-3xl font-semibold tracking-tight text-slate-900 md:text-4xl dark:text-slate-50">More screens</h2>
+              </div>
+              <p className="hidden text-sm text-slate-500 sm:block dark:text-slate-400">{allImages.length} {allImages.length === 1 ? "image" : "images"}. Click any to view full screen.</p>
+            </div>
+            <div className="mt-8">
+              <GalleryGrid images={gallery} startIndex={coverImage ? 1 : 0} />
+            </div>
+          </ScrollReveal>
+        </section>
+      ) : null}
 
       {/* Next */}
       {next && next.id !== project.id ? (
@@ -174,5 +189,6 @@ export function CaseStudy({ project, next, position, preview = false }: Props) {
         </section>
       ) : null}
     </article>
+    </LightboxProvider>
   );
 }
