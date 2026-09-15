@@ -49,7 +49,6 @@ export const projectUpdateSchema = projectCreateSchema.extend({
   links: z.array(linkSchema).max(8),
   repo_visibility: z.enum(["public", "private", "none"]),
   video_url: z.union([httpUrl, z.literal("")]),
-  cover_aspect: z.enum(["16:10", "4:5"]),
   technology_ids: z.array(z.string().uuid()).max(30),
 });
 

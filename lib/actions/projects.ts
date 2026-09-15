@@ -72,7 +72,6 @@ export async function updateProject(id: string, _prev: ActionResult | undefined,
     links: parseJsonField(formData, "links"),
     repo_visibility: formData.get("repo_visibility"),
     video_url: formData.get("video_url") ?? "",
-    cover_aspect: formData.get("cover_aspect"),
     technology_ids: formData.getAll("technology_ids").map(String),
   });
   if (!parsed.success) return fail("Please fix the highlighted fields.", zodErrors(parsed.error.issues));

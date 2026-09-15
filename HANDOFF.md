@@ -24,6 +24,7 @@ Verify with `node scripts/check-cover.mjs` (needs `npx next start -p 3123`): ass
 ## Recently Completed
 - Project cover: uncropped browser-frame hero, clickable into shared lightbox with gallery.
 - Favicon: app/icon.svg + apple-icon.png (LG mark), manifest.ts, public/icon-512.png.
+- Project cards + laptop mockup: object-contain, box follows image ratio; cover_aspect removed from admin form.
 - 2026-09-16: admin recoloured blue/white and de-framed; project page: Lenis scroll reset on route change (was landing at the footer), smaller 16:9 hero, Gallery with full-screen lightbox (arrows, keyboard, swipe).
 - 2026-09-16: admin rebuilt in the monochrome reference style (D29): grouped sidebar, header with search/Add/user menu, breadcrumbs, icon-circle cards; new pages Skills, Journey, Home, About, Now, Contact, Profile, Site settings; field-scoped settings saves.
 - 2026-09-15: technology logos everywhere (Simple Icons CDN via `TechLogo`, `technologies.icon` column, migration 0007), home Toolbox logo wall, logos on cards, case studies, Skills and About.

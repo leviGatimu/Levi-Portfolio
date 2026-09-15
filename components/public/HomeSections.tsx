@@ -149,7 +149,7 @@ export function SelectedWork({ projects }: { projects: ProjectWithRelations[] })
 
         <ScrollReveal direction="left" className="relative">
           <div className="absolute -inset-6 -z-10 bg-blue-300/30 dark:bg-blue-600/20" style={{ borderRadius: BLOBS[2] }} />
-          <LaptopMockup src={cover ? mediaUrl(cover.storage_path) : null} alt={cover?.alt ?? "Project screenshot"} label={lead?.name} />
+          <LaptopMockup src={cover ? mediaUrl(cover.storage_path) : null} alt={cover?.alt ?? "Project screenshot"} ratio={cover ? cover.width / cover.height : undefined} label={lead?.name} />
         </ScrollReveal>
       </div>
     </section>

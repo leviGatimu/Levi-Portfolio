@@ -158,12 +158,6 @@ export function ProjectForm({ project, technologies }: Props) {
             <Input id="timeline" name="timeline" defaultValue={project.timeline ?? ""} maxLength={60} />
           </Field>
         </div>
-        <Field label="Cover aspect" htmlFor="cover_aspect" help="16:10 for desktop/web screenshots; 4:5 for phone screens and portraits." error={errors.cover_aspect}>
-          <Select id="cover_aspect" name="cover_aspect" defaultValue={project.cover_aspect} className="sm:max-w-xs">
-            <option value="16:10">16:10 (landscape)</option>
-            <option value="4:5">4:5 (portrait)</option>
-          </Select>
-        </Field>
       </Fieldset>
 
       {/* ---------- Details ---------- */}

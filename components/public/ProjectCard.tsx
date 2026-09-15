@@ -28,10 +28,11 @@ export function ProjectCard({ project, index = 0, priority = false }: Props) {
     >
       <div className={`pointer-events-none absolute -right-8 -top-10 h-44 w-44 opacity-70 ${BLOB_COLORS[index % BLOB_COLORS.length]}`} style={{ borderRadius: BLOBS[index % BLOBS.length] }} />
 
-      <div className="relative m-4 mb-0 overflow-hidden rounded-[1.3rem] border border-black/[0.06] bg-slate-100 dark:border-white/10 dark:bg-slate-800">
-        <div className={project.cover_aspect === "4:5" ? "relative aspect-[4/5] max-h-[360px]" : "relative aspect-[16/10]"}>
+      {/* The whole screenshot, never cropped: the box takes the image's own ratio (clamped so phone shots stay sane). */}
+      <div className="relative m-4 mb-0 overflow-hidden rounded-[1.3rem] border border-black/[0.06] bg-white dark:border-white/10 dark:bg-slate-950">
+        <div className="relative" style={{ aspectRatio: cover ? Math.min(2.2, Math.max(0.8, cover.width / cover.height)) : 1.6 }}>
           {cover ? (
-            <Image src={mediaUrl(cover.storage_path)} alt={cover.alt} fill priority={priority} sizes="(min-width: 1024px) 560px, 100vw" className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]" />
+            <Image src={mediaUrl(cover.storage_path)} alt={cover.alt} fill priority={priority} sizes="(min-width: 1024px) 560px, 100vw" className="object-contain object-top transition-transform duration-700 group-hover:scale-[1.02]" />
           ) : (
             <div className="flex h-full w-full items-center justify-center text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">No image yet</div>
           )}
