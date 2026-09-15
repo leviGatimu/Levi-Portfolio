@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { SITE_URL } from "@/lib/utils/site";
 import "./globals.css";
 
@@ -31,7 +32,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className="flex min-h-screen flex-col font-sans antialiased">{children}</body>
+      <body className="flex min-h-screen flex-col font-sans antialiased">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
