@@ -13,6 +13,7 @@ Supabase Dashboard → **SQL Editor** → **New query** → paste the file → *
 | 1 | `migrations/0001_init.sql` | Tables, enums, triggers, indexes, the single `site_settings` row, `admins` table, `is_admin()` and all Row Level Security policies |
 | 2 | `migrations/0002_storage.sql` | Creates the public `media` bucket (5 MB per file, images only) and its policies |
 | 3 | `migrations/0003_seed_technologies.sql` | Starter technology list for the picker (optional; edit later in the admin) |
+| 4 | `migrations/0004_admin_user.sql` | Makes the dashboard user the admin (UID already filled in) |
 
 All three are safe to run again if something goes wrong halfway.
 
@@ -27,12 +28,7 @@ Then Dashboard → **Authentication** → **Sign In / Providers** → Email → 
 
 ### 3. Make that user the admin
 
-Copy the user's **UID** from the Users page, then run in the SQL editor:
-
-```sql
-insert into public.admins (user_id) values ('PASTE-THE-UID-HERE')
-on conflict do nothing;
-```
+Run `migrations/0004_admin_user.sql` in the SQL editor (the UID is already in it). If you ever create a different user, replace the UID in that file and run it again.
 
 ### 4. Check it worked
 
@@ -45,9 +41,10 @@ Create `migrations/0004_something.sql`, write idempotent SQL (`create table if n
 
 | File | Applied on |
 |------|------------|
-| 0001_init.sql | |
-| 0002_storage.sql | |
-| 0003_seed_technologies.sql | |
+| 0001_init.sql | 2026-09-15 |
+| 0002_storage.sql | 2026-09-15 |
+| 0003_seed_technologies.sql | 2026-09-15 |
+| 0004_admin_user.sql | |
 
 ## Keys
 
