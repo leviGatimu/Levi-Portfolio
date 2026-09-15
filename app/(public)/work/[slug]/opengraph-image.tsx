@@ -17,17 +17,17 @@ export default async function Image({ params }: { params: Promise<{ slug: string
 
   return new ImageResponse(
     (
-      <div style={{ width: "100%", height: "100%", display: "flex", background: "#202126", color: "#f2f0eb", fontFamily: "monospace", position: "relative" }}>
+      <div style={{ width: "100%", height: "100%", display: "flex", background: "#ececec", color: "#0f172a", fontFamily: "sans-serif", position: "relative" }}>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 64, width: cover ? "58%" : "100%" }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 20, letterSpacing: 3, color: "#4ee1a0" }}>LEVI GATIMU · WORK</div>
+            <div style={{ fontSize: 20, letterSpacing: 3, color: "#2563eb" }}>LEVI GATIMU · WORK</div>
             <div style={{ fontSize: titleSize, fontWeight: 600, marginTop: 28, lineHeight: 1.05 }}>{project?.name ?? "Work"}</div>
-            <div style={{ fontSize: 26, color: "#a5a4a0", marginTop: 24, lineHeight: 1.35 }}>{project?.one_liner ?? ""}</div>
+            <div style={{ fontSize: 26, color: "#475569", marginTop: 24, lineHeight: 1.35 }}>{project?.one_liner ?? ""}</div>
           </div>
-          <div style={{ fontSize: 18, letterSpacing: 2, color: "#83827e" }}>{stack.toUpperCase()}</div>
+          <div style={{ fontSize: 18, letterSpacing: 2, color: "#64748b" }}>{stack.toUpperCase()}</div>
         </div>
         {cover ? (
-          <div style={{ position: "absolute", right: -40, top: 90, width: 560, height: 600, display: "flex", borderRadius: 8, overflow: "hidden", background: "#292a2f" }}>
+          <div style={{ position: "absolute", right: -40, top: 90, width: 560, height: 600, display: "flex", borderRadius: 28, overflow: "hidden", background: "#ffffff", border: "1px solid rgba(0,0,0,0.06)" }}>
             {/* eslint-disable-next-line @next/next/no-img-element -- ImageResponse renders plain img */}
             <img src={mediaUrl(cover.storage_path)} alt="" width={560} height={600} style={{ objectFit: "cover", objectPosition: "left top" }} />
           </div>

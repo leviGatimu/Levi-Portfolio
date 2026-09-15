@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Hero } from "@/components/public/Hero";
-import { Beyond, Contact, HowIWork, Introduce, LatestWorks, TechMarquee } from "@/components/public/HomeSections";
+import Hero from "@/components/public/Hero";
+import { Beyond, ClosingCta, Meet, ProjectGrid, SelectedWork, WhatIDo } from "@/components/public/HomeSections";
 import { getAllTechnologies, getPublishedProjects, getSiteSettings } from "@/lib/db/public";
 import { mediaUrl } from "@/lib/supabase/env";
 import { SITE_URL } from "@/lib/utils/site";
@@ -18,12 +18,17 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+/** The poster headline is a fixed design element; the statement under it comes from the admin. */
+const HEADLINE = ["Software", "that actually", "ships."];
+
 export default async function HomePage() {
   const [settings, projects, technologies] = await Promise.all([getSiteSettings(), getPublishedProjects(), getAllTechnologies()]);
+  const featured = projects.filter((p) => p.is_featured);
+  const ordered = [...featured, ...projects.filter((p) => !p.is_featured)];
   const usedTechIds = new Set(projects.flatMap((p) => p.project_technologies.map((pt) => pt.technologies?.id)));
   const techCount = usedTechIds.size > 0 ? usedTechIds.size : technologies.filter((t) => t.proficiency).length;
-  const featured = projects.filter((p) => p.is_featured);
-  const others = projects.filter((p) => !p.is_featured).slice(0, Math.max(0, 6 - featured.length));
+  const portrait = settings.portrait_home_path ? mediaUrl(settings.portrait_home_path) : "/portrait.png";
+  const [firstName] = settings.display_name.split(" ");
 
   const person = {
     "@context": "https://schema.org",
@@ -34,19 +39,20 @@ export default async function HomePage() {
     affiliation: { "@type": "EducationalOrganization", name: "NGA Coding Academy" },
     address: { "@type": "PostalAddress", addressLocality: "Kigali", addressCountry: "RW" },
     sameAs: [settings.github_url, settings.linkedin_url, settings.instagram_url].filter(Boolean),
-    ...(settings.portrait_home_path ? { image: mediaUrl(settings.portrait_home_path) } : {}),
+    image: portrait.startsWith("/") ? `${SITE_URL}${portrait}` : portrait,
   };
 
   return (
-    <>
+    <div className="relative">
+      <div className="grain" />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(person).replace(/</g, "\u003c") }} />
-      <Hero settings={settings} publishedCount={projects.length} technologyCount={techCount} />
-      <TechMarquee names={technologies.map((t) => t.name)} />
-      <LatestWorks featured={featured} others={others} />
-      <Introduce settings={settings} />
-      <HowIWork />
+      <Hero firstName={firstName ?? "Levi"} headline={HEADLINE} intro={settings.opening_statement} portraitSrc={portrait} portraitAlt={settings.portrait_alt} />
+      <Meet settings={settings} portraitSrc={portrait} publishedCount={projects.length} technologyCount={techCount} />
+      <WhatIDo />
+      <SelectedWork projects={ordered} />
+      <ProjectGrid projects={ordered.slice(0, 6)} />
       <Beyond settings={settings} />
-      <Contact settings={settings} />
-    </>
+      <ClosingCta settings={settings} />
+    </div>
   );
 }

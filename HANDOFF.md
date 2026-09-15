@@ -19,7 +19,7 @@ Solved (V1 code complete) — 2026-09-15. `npm run build`, `typecheck`, `lint` a
 
 ## Working Notes
 - Env: `.env.local` holds `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_SITE_URL`. Only the publishable key is ever used.
-- Design in code (D24): charcoal tokens in `app/globals.css` `@theme`; accent `#4ee1a0`; fonts in `app/layout.tsx`. The planning docs under `docs/design` describe the earlier plate/ledger/paper concept — the code is the current design.
+- Design in code (D27): the public site is a port of Levi's Study Tracker landing design (light canvas, Clash fonts via Fontshare, blue accent, white blob cards, draggable hero cards, Lenis, custom cursor, dark-mode toggle, SandText footer). Components in `components/public/`. Admin keeps a dark palette via `.admin-scope`. Earlier design docs are historical.
 - Data flow: public pages use the cookie-less client (`lib/supabase/public.ts`) and are ISR (1h); every admin write calls `revalidatePublic()` (`lib/actions/revalidate.ts`). Admin uses `@supabase/ssr` cookies; `proxy.ts` redirects, `requireAdmin()` + RLS enforce.
 - `mediaUrl()` returns absolute paths/URLs unchanged (used by fixtures); storage paths become public bucket URLs.
 - `types/database.ts` is hand-written — update it when a migration changes the schema (Relationships are needed for embedded selects to type-check).
@@ -29,6 +29,7 @@ Solved (V1 code complete) — 2026-09-15. `npm run build`, `typecheck`, `lint` a
 - Next step on resume: if migrations are applied, log in at `/admin/login`, create a real project end-to-end (upload → publish) and confirm it appears on `/`; then deploy to Vercel and run Lighthouse on the preview URL.
 
 ## Recently Completed
+- 2026-09-15 (night): public site rebuilt as a rebranded copy of the Study Tracker website design (D27); photo `public/portrait.png` used as rounded cards; dashes rule kept.
 - 2026-09-15 (late): fixed client crash (NEXT_PUBLIC_ env read dynamically), cutout portrait from image.svg in the hero, word-reveal/count-up/marquee/tilt animations, richer home (intro bio, How I work, Beyond software), all em dashes removed, migration 0005 for descriptive copy.
 - 2026-09-15: V1 implementation — public site, admin CMS, migrations, README.
 - 2026-09-15: Phase 0 planning and documentation.

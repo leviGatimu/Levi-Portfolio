@@ -13,7 +13,7 @@ export default async function PreviewPage({ params }: { params: Promise<{ id: st
   if (!data) notFound();
   const project = normalizeProject(data as unknown as ProjectWithRelations);
   return (
-    <div className="-mx-5 -my-8 sm:-mx-8 lg:-mx-12 lg:-my-12">
+    <div className="-mx-5 -my-8 overflow-hidden rounded-[1.5rem] bg-[#ececec] text-[#15171c] sm:-mx-8 lg:-mx-12 lg:-my-12 dark:bg-[#0a0e17] dark:text-[#e6ecf7]">
       <CaseStudy project={project} next={null} preview />
     </div>
   );

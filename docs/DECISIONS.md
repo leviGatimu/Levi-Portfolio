@@ -181,3 +181,9 @@ Format: **Decision · Reason · Alternatives · Consequences · Date · Status.*
 - **Reason:** Simplest cache model that is stable across Next.js versions. Public pages revalidate hourly and immediately after any publish/edit/reorder.
 - **Consequences:** `/work` is dynamic (it reads `?type=`); everything else is static with a 1-hour revalidate.
 - **Date:** 2026-09-15 · **Status:** Accepted
+
+### D27 — Public design ported from the Study Tracker landing site (supersedes D24 for the public UI)
+
+- **Reason:** Levi rejected the charcoal/mono direction and asked to reuse the design of his Study Tracker website (`Study Tracker Website` project) one-to-one, rebranded as a portfolio: light `#ececec` canvas with white floating panels, Clash Display/Grotesk, blue accent, splash-blob cards, big centred poster headline with draggable floating cards, Lenis smooth scroll, custom cursor, class-based dark mode toggle, dark gradient panel, sand-grain wordmark footer.
+- **Consequences:** `app/globals.css` rewritten on Tailwind v4 (`@custom-variant dark`, utilities `glass-card`, `eyebrow`, `btn-dark`, `btn-light`, `nav-blur`); fonts loaded from Fontshare; `lenis` and `motion` are dependencies; the admin keeps its own dark palette under `.admin-scope`. The portrait is `public/portrait.png` (a square photo, always shown with rounded corners), replaced by an uploaded portrait when one exists. The reference's copy, mockup content and CTAs were rebranded; its UX (sections, motion, interactions) was kept.
+- **Date:** 2026-09-15 · **Status:** Accepted

@@ -1,20 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowLeft, ArrowUpRight, Lock } from "lucide-react";
 import type { ProjectWithRelations } from "@/types/database";
 import { Prose, type ImageDimensions } from "@/components/shared/Prose";
-import { Reveal } from "@/components/shared/Reveal";
 import { coverOf, techsOf } from "@/lib/db/public";
 import { mediaUrl } from "@/lib/supabase/env";
-import { cn } from "@/lib/utils/cn";
-import { STATUS_LABEL, TYPE_LABEL, formatIndex } from "@/lib/utils/format";
-import { ProjectPanel } from "./ProjectPanel";
+import { STATUS_LABEL, TYPE_LABEL } from "@/lib/utils/format";
+import { ProjectCard } from "./ProjectCard";
+import ScrollReveal from "./ScrollReveal";
 
-type Props = {
-  project: ProjectWithRelations;
-  next: ProjectWithRelations | null;
-  position?: { index: number; total: number };
-  preview?: boolean;
-};
+type Props = { project: ProjectWithRelations; next: ProjectWithRelations | null; position?: { index: number; total: number }; preview?: boolean };
 
 const VIDEO_HOSTS = ["www.youtube.com", "youtube.com", "youtu.be", "www.youtube-nocookie.com", "vimeo.com", "player.vimeo.com"];
 
@@ -37,147 +32,137 @@ function embedUrl(raw: string): string | null {
 export function CaseStudy({ project, next, position, preview = false }: Props) {
   const cover = coverOf(project);
   const techs = techsOf(project);
-  const gallery = project.project_images.filter((i) => !i.is_cover);
-  const bodyImages: ImageDimensions = Object.fromEntries(
-    project.project_images.map((i) => [mediaUrl(i.storage_path), { width: i.width, height: i.height, alt: i.alt }]),
-  );
+  const bodyImages: ImageDimensions = Object.fromEntries(project.project_images.map((i) => [mediaUrl(i.storage_path), { width: i.width, height: i.height, alt: i.alt }]));
   const referenced = new Set(project.project_images.filter((i) => project.body_md.includes(mediaUrl(i.storage_path))).map((i) => i.id));
-  const trailingGallery = gallery.filter((i) => !referenced.has(i.id));
+  const gallery = project.project_images.filter((i) => !i.is_cover && !referenced.has(i.id));
   const video = project.video_url ? embedUrl(project.video_url) : null;
 
-  const meta: { label: string; value: React.ReactNode }[] = [
+  const meta = [
     { label: "Role", value: project.role || "Not specified" },
     { label: "Team", value: project.team || "Not specified" },
     { label: "Timeline", value: project.timeline || String(project.year) },
     { label: "Status", value: STATUS_LABEL[project.status] },
-    {
-      label: "Stack",
-      value: techs.length ? techs.map((t) => t.name).join(" · ") : "Not specified",
-    },
   ];
 
   return (
-    <article className="container-site py-12 lg:py-20">
+    <article className="relative">
+      <div className="grain" />
       {preview ? (
-        <div className="no-print mb-8 flex items-center justify-between rounded-[3px] bg-accent px-4 py-2 font-mono text-xs text-accent-ink">
+        <div className="fixed inset-x-0 top-0 z-[110] flex items-center justify-between bg-blue-600 px-6 py-2 text-sm font-semibold text-white">
           <span>Preview: this is a draft, visible only to you</span>
           <Link href={`/admin/projects/${project.id}`} className="underline">Back to editor</Link>
         </div>
       ) : null}
 
       {/* Header */}
-      <header className="grid gap-8 lg:grid-cols-12">
-        <div className="lg:col-span-8">
-          <p className="meta flex flex-wrap items-center gap-x-3 text-fg-subtle">
-            {position ? <span className="text-accent">{formatIndex(position.index)} / {formatIndex(position.total)}</span> : null}
-            <span>{TYPE_LABEL[project.type]}</span>
-            <span aria-hidden="true">·</span>
-            <span>{project.year}</span>
-            <span aria-hidden="true">·</span>
-            <span>{STATUS_LABEL[project.status]}</span>
-          </p>
-          <h1 className="mt-5 font-mono text-display-lg font-medium text-fg">{project.name}</h1>
-          {project.one_liner ? <p className="mt-5 max-w-[52ch] text-lead text-fg-muted">{project.one_liner}</p> : null}
-        </div>
-        <ul className="flex flex-wrap gap-1.5 self-end lg:col-span-4 lg:justify-end" aria-label="Technologies">
-          {techs.map((t) => (
-            <li key={t.id} className="chip">{t.name}</li>
-          ))}
-        </ul>
-      </header>
+      <section className="px-6 pb-12 pt-40">
+        <div className="mx-auto max-w-7xl">
+          <ScrollReveal className="max-w-4xl">
+            <Link href="/work" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
+              <ArrowLeft size={16} /> All work
+            </Link>
+            <div className="mt-8 flex flex-wrap items-center gap-2">
+              <span className="rounded-full bg-blue-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-blue-600 dark:bg-blue-500/15 dark:text-blue-300">{TYPE_LABEL[project.type]}</span>
+              <span className="rounded-full bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 shadow-sm dark:bg-slate-900 dark:text-slate-300">{project.year} · {STATUS_LABEL[project.status]}</span>
+              {position ? <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">{position.index} of {position.total}</span> : null}
+            </div>
+            <h1 className="mt-6 font-display text-6xl font-semibold leading-[0.9] tracking-tight text-slate-900 md:text-8xl dark:text-slate-50">{project.name}</h1>
+            {project.one_liner ? <p className="mt-7 max-w-2xl text-xl leading-relaxed text-slate-500 md:text-2xl dark:text-slate-400">{project.one_liner}</p> : null}
+          </ScrollReveal>
 
-      {/* Metadata */}
-      <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-6 border-y border-rule py-6 md:grid-cols-3 lg:grid-cols-6">
-        {meta.map((m) => (
-          <div key={m.label} className={cn(m.label === "Stack" && "col-span-2 md:col-span-3 lg:col-span-2")}>
-            <dt className="meta text-fg-subtle">{m.label}</dt>
-            <dd className="meta-lg mt-2 text-fg">{m.value}</dd>
-          </div>
-        ))}
-        {project.links.length > 0 || project.repo_visibility === "private" ? (
-          <div className="col-span-2 md:col-span-3 lg:col-span-6 lg:border-t lg:border-rule lg:pt-6">
-            <dt className="meta text-fg-subtle">Links</dt>
-            <dd className="mt-2 flex flex-wrap gap-x-6 gap-y-2">
-              {project.links.map((l) => (
-                <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer" className="meta-lg link-underline text-fg">
-                  {l.label} <span aria-hidden="true">↗</span>
-                </a>
-              ))}
-              {project.repo_visibility === "private" ? <span className="meta-lg text-fg-subtle">Private repository</span> : null}
-            </dd>
-          </div>
-        ) : null}
-      </dl>
+          <ScrollReveal delay={0.1} className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {meta.map((m) => (
+              <div key={m.label} className="rounded-2xl border border-black/[0.06] bg-white p-5 dark:border-white/10 dark:bg-slate-900">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">{m.label}</p>
+                <p className="mt-2 font-medium leading-snug text-slate-900 dark:text-slate-50">{m.value}</p>
+              </div>
+            ))}
+          </ScrollReveal>
+
+          <ScrollReveal delay={0.15} className="mt-4 flex flex-wrap items-center gap-2">
+            {techs.map((t) => (
+              <span key={t.id} className="rounded-full border border-black/[0.08] bg-white px-3.5 py-1.5 text-sm font-semibold text-slate-700 dark:border-white/15 dark:bg-slate-900 dark:text-slate-200">{t.name}</span>
+            ))}
+            {project.links.map((l) => (
+              <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-500">
+                {l.label} <ArrowUpRight size={14} className="transition-transform group-hover:rotate-45" />
+              </a>
+            ))}
+            {project.repo_visibility === "private" ? (
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-black/15 px-3.5 py-1.5 text-sm font-semibold text-slate-500 dark:border-white/20 dark:text-slate-400"><Lock size={13} /> Private repository</span>
+            ) : null}
+          </ScrollReveal>
+        </div>
+      </section>
 
       {/* Hero image */}
       {cover ? (
-        <figure className="mt-10 lg:mt-14">
-          <div
-            className={cn(
-              "relative overflow-hidden rounded-[4px] shadow-[inset_0_0_0_1px_var(--color-rule)]",
-              project.cover_aspect === "4:5" ? "mx-auto max-w-[520px] aspect-[4/5]" : "aspect-[16/10]",
-            )}
-          >
-            <Image src={mediaUrl(cover.storage_path)} alt={cover.alt} fill priority sizes="(min-width: 1440px) 1312px, 100vw" className="object-cover object-top" />
-          </div>
-          {cover.caption ? <figcaption className="meta-lg mt-3 text-fg-subtle">{cover.caption}</figcaption> : null}
-        </figure>
+        <section className="px-6 pb-8">
+          <ScrollReveal className="relative mx-auto max-w-7xl">
+            <div className="absolute -inset-4 -z-10 rounded-[2.5rem] bg-blue-300/30 blur-2xl dark:bg-blue-600/20" />
+            <figure>
+              <div className={`relative overflow-hidden rounded-[2rem] border border-black/[0.06] bg-white shadow-[0_40px_80px_-40px_rgba(15,23,42,0.5)] dark:border-white/10 ${project.cover_aspect === "4:5" ? "mx-auto aspect-[4/5] max-w-[560px]" : "aspect-[16/10]"}`}>
+                <Image src={mediaUrl(cover.storage_path)} alt={cover.alt} fill priority sizes="(min-width: 1280px) 1280px, 100vw" className="object-cover object-top" />
+              </div>
+              {cover.caption ? <figcaption className="mt-4 text-center text-sm text-slate-400">{cover.caption}</figcaption> : null}
+            </figure>
+          </ScrollReveal>
+        </section>
       ) : null}
 
       {video ? (
-        <div className="mt-8 aspect-video overflow-hidden rounded-[4px] bg-bg-sunken">
-          <iframe src={video} title={`${project.name} video`} className="h-full w-full" allow="accelerometer; encrypted-media; picture-in-picture" allowFullScreen loading="lazy" />
-        </div>
-      ) : project.video_url ? (
-        <p className="mt-6">
-          <a href={project.video_url} target="_blank" rel="noopener noreferrer" className="meta-lg link-underline text-fg">Watch the video <span aria-hidden="true">↗</span></a>
-        </p>
+        <section className="px-6 pb-8">
+          <div className="mx-auto aspect-video max-w-5xl overflow-hidden rounded-[2rem] border border-black/[0.06] bg-slate-900 shadow-2xl dark:border-white/10">
+            <iframe src={video} title={`${project.name} video`} className="h-full w-full" allow="accelerometer; encrypted-media; picture-in-picture" allowFullScreen loading="lazy" />
+          </div>
+        </section>
       ) : null}
 
       {/* Narrative */}
-      <div className="mt-14 grid gap-10 lg:mt-20 lg:grid-cols-12">
-        <aside className="lg:col-span-3">
-          <div className="lg:sticky lg:top-24">
-            <span className="meta text-fg-subtle">Case study</span>
-            {project.summary ? <p className="mt-3 text-small text-fg-muted">{project.summary}</p> : null}
-          </div>
-        </aside>
-        <div className="lg:col-span-8 lg:col-start-5">
-          {project.body_md.trim() ? (
-            <Prose markdown={project.body_md} images={bodyImages} />
-          ) : (
-            <p className="font-mono text-small text-fg-subtle">The write-up for this project is coming.</p>
-          )}
-        </div>
-      </div>
-
-      {/* Trailing gallery */}
-      {trailingGallery.length > 0 ? (
-        <section className="mt-16 lg:mt-24" aria-label="Gallery">
-          <div className="grid gap-8 lg:grid-cols-12">
-            {trailingGallery.map((img, i) => (
-              <Reveal
-                key={img.id}
-                as="div"
-                className={cn(
-                  img.is_wide ? "lg:col-span-12" : "lg:col-span-8",
-                  !img.is_wide && i % 2 === 1 && "lg:col-start-5",
-                )}
-              >
-                <figure>
-                  <div className="overflow-hidden rounded-[4px] shadow-[inset_0_0_0_1px_var(--color-rule)]">
-                    <Image
-                      src={mediaUrl(img.storage_path)}
-                      alt={img.alt}
-                      width={img.width}
-                      height={img.height}
-                      sizes={img.is_wide ? "(min-width: 1440px) 1312px, 100vw" : "(min-width: 1024px) 860px, 100vw"}
-                      className="h-auto w-full"
-                    />
+      <section className="px-6 py-16 lg:py-24">
+        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12">
+          <aside className="lg:col-span-4">
+            <div className="lg:sticky lg:top-28">
+              <div className="rounded-[1.9rem] border border-black/[0.06] bg-white p-8 dark:border-white/10 dark:bg-slate-900">
+                <span className="eyebrow">In short</span>
+                <p className="mt-4 leading-relaxed text-slate-600 dark:text-slate-300">{project.summary || project.one_liner}</p>
+                {project.collaborators.length > 0 ? (
+                  <div className="mt-6 border-t border-black/[0.06] pt-5 dark:border-white/10">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Collaborators</p>
+                    <ul className="mt-3 space-y-2 text-sm">
+                      {project.collaborators.map((c) => (
+                        <li key={c.name} className="text-slate-700 dark:text-slate-200">
+                          {c.url ? <a href={c.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-600 hover:underline">{c.name}</a> : <span className="font-semibold">{c.name}</span>}
+                          <span className="text-slate-400"> · {c.role}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  {img.caption ? <figcaption className="meta-lg mt-3 text-fg-subtle">{img.caption}</figcaption> : null}
+                ) : null}
+              </div>
+            </div>
+          </aside>
+          <div className="lg:col-span-8">
+            {project.body_md.trim() ? (
+              <Prose markdown={project.body_md} images={bodyImages} className="!max-w-none lg:!max-w-[72ch]" />
+            ) : (
+              <p className="text-lg text-slate-500 dark:text-slate-400">The write-up for this project is coming.</p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Gallery */}
+      {gallery.length > 0 ? (
+        <section className="px-6 pb-16" aria-label="Gallery">
+          <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-2">
+            {gallery.map((img, i) => (
+              <ScrollReveal key={img.id} delay={(i % 2) * 0.08} className={img.is_wide ? "md:col-span-2" : ""}>
+                <figure className="overflow-hidden rounded-[1.9rem] border border-black/[0.06] bg-white p-3 shadow-[0_28px_60px_-34px_rgba(15,23,42,0.3)] dark:border-white/10 dark:bg-slate-900">
+                  <Image src={mediaUrl(img.storage_path)} alt={img.alt} width={img.width} height={img.height} sizes={img.is_wide ? "(min-width: 1280px) 1280px, 100vw" : "(min-width: 768px) 640px, 100vw"} className="h-auto w-full rounded-[1.3rem]" />
+                  {img.caption ? <figcaption className="px-3 pb-2 pt-4 text-sm text-slate-500 dark:text-slate-400">{img.caption}</figcaption> : null}
                 </figure>
-              </Reveal>
+              </ScrollReveal>
             ))}
           </div>
         </section>
@@ -185,12 +170,14 @@ export function CaseStudy({ project, next, position, preview = false }: Props) {
 
       {/* Next */}
       {next && next.id !== project.id ? (
-        <nav className="mt-20 border-t border-rule pt-10 lg:mt-28" aria-label="Next project">
-          <span className="meta text-fg-subtle">Next project</span>
-          <div className="mt-6 md:max-w-[640px]">
-            <ProjectPanel project={next} />
-          </div>
-        </nav>
+        <section className="px-6 pb-28 pt-8">
+          <ScrollReveal className="mx-auto max-w-7xl">
+            <span className="eyebrow">Next project</span>
+            <div className="mt-6 grid md:grid-cols-2">
+              <ProjectCard project={next} index={1} />
+            </div>
+          </ScrollReveal>
+        </section>
       ) : null}
     </article>
   );
