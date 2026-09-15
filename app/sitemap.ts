@@ -10,7 +10,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     { url: `${SITE_URL}/`, lastModified: newest },
     { url: `${SITE_URL}/work`, lastModified: newest },
+    { url: `${SITE_URL}/experiments`, lastModified: newest },
     { url: `${SITE_URL}/about`, lastModified: settings.updated_at },
+    { url: `${SITE_URL}/journey`, lastModified: settings.updated_at },
+    { url: `${SITE_URL}/skills`, lastModified: settings.updated_at },
+    { url: `${SITE_URL}/now`, lastModified: settings.updated_at },
+    { url: `${SITE_URL}/contact`, lastModified: settings.updated_at },
     ...projects.map((p) => ({ url: `${SITE_URL}/work/${p.slug}`, lastModified: p.updated_at })),
   ];
 }

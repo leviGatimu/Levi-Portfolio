@@ -6,7 +6,7 @@ import { removePortrait, uploadPortrait } from "@/lib/actions/images";
 import { exportContent, updateSiteSettings } from "@/lib/actions/settings";
 import { mediaUrl } from "@/lib/supabase/env";
 import { formatDate } from "@/lib/utils/format";
-import type { FocusArea, SiteSettingsRow } from "@/types/database";
+import type { FocusArea, JourneyItem, SiteSettingsRow } from "@/types/database";
 import { ActionButton } from "./ActionButton";
 import { Button, Field, Fieldset, Input, Notice, Textarea } from "./ui";
 
@@ -14,6 +14,7 @@ export function SiteForm({ settings }: { settings: SiteSettingsRow }) {
   const [state, action, pending] = useActionState(updateSiteSettings, undefined);
   const [focus, setFocus] = useState<FocusArea[]>(settings.focus_areas);
   const [highlights, setHighlights] = useState<FocusArea[]>(settings.highlights ?? []);
+  const [journey, setJourney] = useState<JourneyItem[]>(settings.journey ?? []);
 
   return (
     <form action={action} className="flex flex-col gap-12">
@@ -68,6 +69,27 @@ export function SiteForm({ settings }: { settings: SiteSettingsRow }) {
           ))}
         </ul>
         <Button size="sm" onClick={() => setHighlights([...highlights, { title: "", description: "" }])} disabled={highlights.length >= 4}>+ Add highlight</Button>
+      </Fieldset>
+
+      <Fieldset legend="Journey" description="The timeline on the /journey page, in order. Keep each entry to one or two sentences.">
+        <input type="hidden" name="journey" value={JSON.stringify(journey)} />
+        <ul className="flex flex-col gap-4">
+          {journey.map((j, i) => (
+            <li key={i} className="grid gap-2 rounded-2xl bg-slate-50 p-4 sm:grid-cols-[120px_1fr_auto]">
+              <Input aria-label="Period" placeholder="Year 1" value={j.period} onChange={(e) => setJourney(journey.map((x, k) => (k === i ? { ...x, period: e.target.value } : x)))} maxLength={30} />
+              <div className="flex flex-col gap-2">
+                <Input aria-label="Title" placeholder="Title" value={j.title} onChange={(e) => setJourney(journey.map((x, k) => (k === i ? { ...x, title: e.target.value } : x)))} maxLength={80} />
+                <Textarea aria-label="Description" placeholder="What happened" value={j.description} onChange={(e) => setJourney(journey.map((x, k) => (k === i ? { ...x, description: e.target.value } : x)))} maxLength={300} className="min-h-16" />
+              </div>
+              <div className="flex gap-1 sm:flex-col">
+                <Button variant="ghost" size="sm" onClick={() => i > 0 && setJourney(journey.map((x, k) => (k === i - 1 ? journey[i]! : k === i ? journey[i - 1]! : x)))} disabled={i === 0} aria-label="Move up">↑</Button>
+                <Button variant="ghost" size="sm" onClick={() => i < journey.length - 1 && setJourney(journey.map((x, k) => (k === i + 1 ? journey[i]! : k === i ? journey[i + 1]! : x)))} disabled={i === journey.length - 1} aria-label="Move down">↓</Button>
+                <Button variant="ghost" size="sm" onClick={() => setJourney(journey.filter((_, k) => k !== i))} aria-label="Remove entry">✕</Button>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <Button size="sm" onClick={() => setJourney([...journey, { period: "", title: "", description: "" }])} disabled={journey.length >= 12}>+ Add entry</Button>
       </Fieldset>
 
       <Fieldset legend="Bio" description="Markdown. Short bio appears on the homepage; long bio on About.">

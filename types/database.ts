@@ -27,6 +27,7 @@ export type ProjectLink = {
 
 export type Collaborator = { name: string; role: string; url?: string };
 export type FocusArea = { title: string; description: string };
+export type JourneyItem = { period: string; title: string; description: string };
 
 export type ProjectRow = {
   id: string;
@@ -101,6 +102,7 @@ export type SiteSettingsRow = {
   now_updated_at: string | null;
   focus_areas: FocusArea[];
   highlights: FocusArea[];
+  journey: JourneyItem[];
   email: string;
   github_url: string | null;
   linkedin_url: string | null;
@@ -114,6 +116,15 @@ export type SiteSettingsRow = {
 };
 
 export type AdminRow = { user_id: string; created_at: string };
+
+export type PageViewRow = {
+  id: number;
+  path: string;
+  referrer: string | null;
+  country: string | null;
+  device: "desktop" | "mobile" | "tablet";
+  viewed_at: string;
+};
 
 type Insert<T, Required extends keyof T = never> = Partial<T> & Pick<T, Required>;
 
@@ -140,6 +151,7 @@ export type Database = {
         ];
       };
       site_settings: { Row: SiteSettingsRow; Insert: Partial<SiteSettingsRow>; Update: Partial<SiteSettingsRow>; Relationships: [] };
+      page_views: { Row: PageViewRow; Insert: never; Update: never; Relationships: [] };
       admins: {
         Row: AdminRow;
         Insert: Insert<AdminRow, "user_id">;
@@ -149,8 +161,11 @@ export type Database = {
         ];
       };
     };
-    Views: Record<string, never>;
-    Functions: { is_admin: { Args: Record<string, never>; Returns: boolean } };
+    Views: { page_views_daily: { Row: { day: string; views: number }; Relationships: [] } };
+    Functions: {
+      is_admin: { Args: Record<string, never>; Returns: boolean };
+      record_page_view: { Args: { p_path: string; p_referrer: string | null; p_country: string | null; p_device: string }; Returns: undefined };
+    };
     Enums: {
       project_type: ProjectType;
       project_status: ProjectStatus;

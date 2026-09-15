@@ -36,6 +36,8 @@ export async function createProject(_prev: ActionResult | undefined, formData: F
     type: formData.get("type"),
     status: formData.get("status"),
     year: formData.get("year"),
+    one_liner: formData.get("one_liner") ?? "",
+    summary: formData.get("summary") ?? "",
   });
   if (!parsed.success) return fail("Please fix the highlighted fields.", zodErrors(parsed.error.issues));
 

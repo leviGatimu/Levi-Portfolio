@@ -34,6 +34,8 @@ export const projectCreateSchema = z.object({
   type: z.enum(["project", "experiment", "client"]),
   status: z.enum(["active", "paused", "completed", "archived"]),
   year: z.coerce.number().int().min(2020).max(2100),
+  one_liner: z.string().trim().max(120, "Keep the one-liner under 120 characters").optional().default(""),
+  summary: z.string().trim().max(400, "Keep the summary under 400 characters").optional().default(""),
 });
 
 export const projectUpdateSchema = projectCreateSchema.extend({
@@ -66,6 +68,12 @@ export const focusAreaSchema = z.object({
   description: z.string().trim().min(1).max(160),
 });
 
+export const journeyItemSchema = z.object({
+  period: z.string().trim().min(1).max(30),
+  title: z.string().trim().min(1).max(80),
+  description: z.string().trim().min(1).max(300),
+});
+
 export const siteSettingsSchema = z.object({
   display_name: z.string().trim().min(1).max(60),
   tagline: z.string().trim().max(120),
@@ -78,6 +86,7 @@ export const siteSettingsSchema = z.object({
   now_md: z.string().max(2000),
   focus_areas: z.array(focusAreaSchema).max(4),
   highlights: z.array(focusAreaSchema).max(4),
+  journey: z.array(journeyItemSchema).max(12),
   email: z.string().trim().email(),
   github_url: z.union([httpUrl, z.literal("")]),
   linkedin_url: z.union([httpUrl, z.literal("")]),

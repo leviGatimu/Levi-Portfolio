@@ -39,6 +39,13 @@ export const DEFAULT_SETTINGS: SiteSettingsRow = {
     { title: "Robotics & embedded", description: "Microcontrollers, sensors, electronics and physical systems that move." },
     { title: "Aviation", description: "Aircraft systems, flight operations, navigation and aviation technology. The long-term destination." },
   ],
+  journey: [
+    { period: "Year 1", title: "Started at NGA Coding Academy", description: "Web fundamentals, PHP and MySQL, the first CRUD apps and a school management system. Learned to finish and deploy things, not just start them." },
+    { period: "Year 1", title: "First real products", description: "Websites for real people and small organisations, built in PHP and later Next.js, deployed and maintained." },
+    { period: "Year 2", title: "Full-stack, desktop and AI", description: "TypeScript, React and Next.js on Supabase and PostgreSQL; a Windows desktop app in C# and Electron; LLM-powered features and an agent-based traffic simulation of Kigali." },
+    { period: "Year 2", title: "Robotics and embedded", description: "Raspberry Pi, sensors and computer vision on a semi-autonomous rover prototype with classmates." },
+    { period: "Next", title: "Commercial aviation", description: "The long-term destination. Software stays a serious second path alongside it." },
+  ],
   email: "getmorelev@gmail.com",
   github_url: "https://github.com/leviGatimu",
   linkedin_url: null,
@@ -86,6 +93,7 @@ function withDefaults(row: Partial<SiteSettingsRow>): SiteSettingsRow {
   if (!merged.bio_short_md?.trim()) merged.bio_short_md = DEFAULT_SETTINGS.bio_short_md;
   if (!Array.isArray(merged.focus_areas) || merged.focus_areas.length === 0) merged.focus_areas = DEFAULT_SETTINGS.focus_areas;
   if (!Array.isArray(merged.highlights) || merged.highlights.length === 0) merged.highlights = DEFAULT_SETTINGS.highlights;
+  if (!Array.isArray(merged.journey) || merged.journey.length === 0) merged.journey = DEFAULT_SETTINGS.journey;
   return merged;
 }
 

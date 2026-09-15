@@ -15,14 +15,18 @@ export default function Footer({ settings }: { settings: SiteSettingsRow }) {
       title: "Explore",
       links: [
         { label: "Work", href: "/work" },
-        { label: "What I do", href: "/#what-i-do" },
+        { label: "Experiments", href: "/experiments" },
         { label: "About", href: "/about" },
-        { label: "Beyond software", href: "/#beyond" },
+        { label: "Journey", href: "/journey" },
+        { label: "Skills", href: "/skills" },
+        { label: "Now", href: "/now" },
+        { label: "Contact", href: "/contact" },
       ],
     },
     {
       title: "Contact",
       links: [
+        { label: "Contact page", href: "/contact" },
         { label: "Email", href: `mailto:${settings.email}`, external: true },
         ...(settings.github_url ? [{ label: "GitHub", href: settings.github_url, external: true }] : []),
         ...(settings.linkedin_url ? [{ label: "LinkedIn", href: settings.linkedin_url, external: true }] : []),

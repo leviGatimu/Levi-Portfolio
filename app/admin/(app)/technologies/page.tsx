@@ -1,4 +1,5 @@
 import { TechnologiesAdmin } from "@/components/admin/TechnologiesAdmin";
+import { PageHeader } from "@/components/admin/ui";
 import { requireAdmin } from "@/lib/supabase/admin-guard";
 import type { TechnologyRow } from "@/types/database";
 
@@ -15,14 +16,9 @@ export default async function TechnologiesPage() {
   for (const l of links ?? []) usage[l.technology_id] = (usage[l.technology_id] ?? 0) + 1;
 
   return (
-    <div>
-      <h1 className="font-mono text-display-md font-medium text-fg">Technologies</h1>
-      <p className="mt-2 max-w-[60ch] text-small text-fg-muted">
-        The shared list used by the project picker. Levels appear on the About page. Rate honestly, or leave blank to keep a technology off About.
-      </p>
-      <div className="mt-8">
-        <TechnologiesAdmin technologies={(techs ?? []) as TechnologyRow[]} usage={usage} />
-      </div>
+    <div className="flex flex-col gap-8">
+      <PageHeader eyebrow="Content" title="Technologies" description="The shared list used by the project picker and the Skills page. Rate honestly, or leave the level blank to keep a technology off the public skills list." />
+      <TechnologiesAdmin technologies={(techs ?? []) as TechnologyRow[]} usage={usage} />
     </div>
   );
 }

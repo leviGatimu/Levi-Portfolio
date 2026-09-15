@@ -14,20 +14,20 @@
   --color-canvas: #ececec;
   --color-canvas-dark: #0a0e17;
 
-  /* Admin (private) keeps its own dark palette; these are only used under /admin. */
-  --color-bg: #202126;
-  --color-bg-raised: #292a2f;
-  --color-bg-sunken: #1a1a1e;
-  --color-bg-deep: #141417;
-  --color-fg: #f2f0eb;
-  --color-fg-muted: #a5a4a0;
-  --color-fg-subtle: #83827e;
-  --color-rule: #34353b;
-  --color-rule-strong: #43444b;
-  --color-accent: #3b82f6;
+  /* Admin (private) palette: light, matching the public site. Only used under /admin. */
+  --color-bg: #ececec;
+  --color-bg-raised: #ffffff;
+  --color-bg-sunken: #f4f4f5;
+  --color-bg-deep: #0f172a;
+  --color-fg: #0f172a;
+  --color-fg-muted: #475569;
+  --color-fg-subtle: #64748b;
+  --color-rule: rgba(15, 23, 42, 0.08);
+  --color-rule-strong: rgba(15, 23, 42, 0.14);
+  --color-accent: #2563eb;
   --color-accent-ink: #ffffff;
-  --color-danger: #ff5c5c;
-  --color-success: #4ee1a0;
+  --color-danger: #dc2626;
+  --color-success: #059669;
 
   --text-meta: 0.6875rem;
   --text-meta--line-height: 1.4;
@@ -321,22 +321,24 @@
 .admin-scope {
   background: var(--color-bg);
   color: var(--color-fg);
-  color-scheme: dark;
+  color-scheme: light;
   font-family: var(--font-sans);
 }
 .admin-scope ::selection { background: var(--color-accent); color: #fff; }
 .admin-scope :focus-visible { outline-color: var(--color-accent); }
+.admin-scope .prose pre { color: #e2e8f0; }
 
 @utility meta {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
+  font-weight: 700;
   font-size: var(--text-meta);
   line-height: var(--text-meta--line-height);
-  letter-spacing: var(--text-meta--letter-spacing);
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
 }
 @utility meta-lg {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: var(--text-meta-lg);
   line-height: var(--text-meta-lg--line-height);
   letter-spacing: var(--text-meta-lg--letter-spacing);
@@ -344,21 +346,19 @@
 @utility chip {
   display: inline-flex;
   align-items: center;
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   line-height: 1;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 0.375rem 0.5rem;
+  padding: 0.4rem 0.7rem;
   border: 1px solid var(--color-rule-strong);
-  border-radius: 4px;
+  border-radius: 999px;
   color: var(--color-fg-muted);
+  background: #fff;
   white-space: nowrap;
 }
 .admin-scope .prose { color: var(--color-fg-muted); }
 .admin-scope .prose h2, .admin-scope .prose h3, .admin-scope .prose strong { color: var(--color-fg); }
 .admin-scope .prose a { color: var(--color-accent); }
-.admin-scope .prose pre { background: var(--color-bg-deep); box-shadow: none; }
 
 /* ---------- Motion accessibility ---------- */
 @media (prefers-reduced-motion: reduce) {

@@ -8,9 +8,9 @@ import { AnimatePresence, motion } from "motion/react";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
 
-type Props = { name: string; email: string };
+type Props = { name: string };
 
-export default function Navbar({ name, email }: Props) {
+export default function Navbar({ name }: Props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
@@ -24,8 +24,11 @@ export default function Navbar({ name, email }: Props) {
 
   const links = [
     { label: "Work", href: "/work" },
+    { label: "Experiments", href: "/experiments" },
     { label: "About", href: "/about" },
-    { label: "What I do", href: "/#what-i-do" },
+    { label: "Journey", href: "/journey" },
+    { label: "Skills", href: "/skills" },
+    { label: "Now", href: "/now" },
   ];
 
   return (
@@ -33,7 +36,7 @@ export default function Navbar({ name, email }: Props) {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
         <Logo size={34} name={name} />
 
-        <div className="hidden items-center gap-10 md:flex">
+        <div className="hidden items-center gap-8 md:flex">
           {links.map((link) => {
             const active = !link.href.includes("#") && pathname.startsWith(link.href);
             return (
@@ -48,13 +51,13 @@ export default function Navbar({ name, email }: Props) {
             );
           })}
           <ThemeToggle />
-          <a
-            href={`mailto:${email}`}
+          <Link
+            href="/contact"
             className="group flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow-[0_10px_30px_-8px_rgba(37,99,235,0.7)] transition-all hover:bg-blue-500"
           >
-            Get in touch
+            Contact
             <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-          </a>
+          </Link>
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
@@ -78,9 +81,9 @@ export default function Navbar({ name, email }: Props) {
                 {link.label}
               </Link>
             ))}
-            <a href={`mailto:${email}`} className="rounded-2xl bg-blue-600 py-4 text-center font-semibold text-white">
-              Get in touch
-            </a>
+            <Link href="/contact" onClick={() => setIsMenuOpen(false)} className="rounded-2xl bg-blue-600 py-4 text-center font-semibold text-white">
+              Contact
+            </Link>
           </motion.div>
         ) : null}
       </AnimatePresence>

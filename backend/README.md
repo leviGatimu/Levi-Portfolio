@@ -15,6 +15,7 @@ Supabase Dashboard → **SQL Editor** → **New query** → paste the file → *
 | 3 | `migrations/0003_seed_technologies.sql` | Starter technology list for the picker (optional; edit later in the admin) |
 | 4 | `migrations/0004_admin_user.sql` | Makes the dashboard user the admin (UID already filled in) |
 | 5 | `migrations/0005_site_copy.sql` | Adds the "Beyond software" highlights and fills in the descriptive bio, intro and now text (all editable in Admin > Site) |
+| 6 | `migrations/0006_analytics_and_journey.sql` | Cookieless page-view analytics for the admin dashboard, and the Journey timeline column |
 
 All three are safe to run again if something goes wrong halfway.
 
@@ -47,6 +48,7 @@ Create `migrations/0004_something.sql`, write idempotent SQL (`create table if n
 | 0003_seed_technologies.sql | 2026-09-15 |
 | 0004_admin_user.sql | |
 | 0005_site_copy.sql | |
+| 0006_analytics_and_journey.sql | |
 
 ## Keys
 
