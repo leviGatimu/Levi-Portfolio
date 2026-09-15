@@ -46,24 +46,24 @@ export default async function EditProjectPage({ params }: { params: Promise<{ id
             }
           >
             <div className="flex items-center justify-between gap-3">
-              <h1 className="text-[17px] font-semibold text-[#111]">{project.name}</h1>
+              <h1 className="text-[17px] font-semibold text-slate-900">{project.name}</h1>
               {project.is_published ? <Badge tone="success">Published</Badge> : <Badge>Draft</Badge>}
             </div>
-            <div className="relative mt-4 aspect-[16/10] overflow-hidden rounded-2xl bg-[#f2f2f4]">
-              {cover ? <Image src={mediaUrl(cover.storage_path)} alt={cover.alt} fill sizes="360px" className="object-cover object-top" /> : <span className="flex h-full items-center justify-center text-[12px] text-[#9a9a9a]">No cover yet</span>}
+            <div className="relative mt-4 aspect-[16/10] overflow-hidden rounded-2xl bg-slate-100">
+              {cover ? <Image src={mediaUrl(cover.storage_path)} alt={cover.alt} fill sizes="360px" className="object-cover object-top" /> : <span className="flex h-full items-center justify-center text-[12px] text-slate-400">No cover yet</span>}
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
-              <span className="rounded-full bg-[#f2f2f4] px-3 py-1.5 text-[12px] font-medium text-[#333]">{TYPE_LABEL[project.type]}</span>
-              <span className="rounded-full bg-[#f2f2f4] px-3 py-1.5 text-[12px] font-medium text-[#333]">{STATUS_LABEL[project.status]}</span>
-              <span className="rounded-full bg-[#f2f2f4] px-3 py-1.5 text-[12px] font-medium text-[#333]">{project.year}</span>
-              {project.is_featured ? <span className="inline-flex items-center gap-1 rounded-full bg-[#f2f2f4] px-3 py-1.5 text-[12px] font-medium text-[#333]"><Star size={12} /> Featured</span> : null}
+              <span className="rounded-full bg-slate-100 px-3 py-1.5 text-[12px] font-medium text-slate-700">{TYPE_LABEL[project.type]}</span>
+              <span className="rounded-full bg-slate-100 px-3 py-1.5 text-[12px] font-medium text-slate-700">{STATUS_LABEL[project.status]}</span>
+              <span className="rounded-full bg-slate-100 px-3 py-1.5 text-[12px] font-medium text-slate-700">{project.year}</span>
+              {project.is_featured ? <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1.5 text-[12px] font-medium text-slate-700"><Star size={12} /> Featured</span> : null}
             </div>
             {stack.length > 0 ? (
               <div className="mt-4">
-                <p className="text-[12px] font-medium text-[#8a8a8a]">Stack</p>
+                <p className="text-[12px] font-medium text-slate-400">Stack</p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {stack.map((t) => (
-                    <span key={t.id} className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.08] px-2.5 py-1 text-[12px] text-[#333]"><TechLogo name={t.name} icon={t.icon} size={14} /> {t.name}</span>
+                    <span key={t.id} className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 px-2.5 py-1 text-[12px] text-slate-700"><TechLogo name={t.name} icon={t.icon} size={14} /> {t.name}</span>
                   ))}
                 </div>
               </div>

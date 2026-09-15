@@ -52,13 +52,13 @@ export function SettingsForm({ settings, sections, submitLabel = "Save changes" 
               return (
                 <div key={f.key}>
                   <div className="flex items-baseline justify-between">
-                    <p className="text-[13px] font-medium text-[#333]">{f.label}</p>
-                    {f.help ? <p className="text-[12px] text-[#8a8a8a]">{f.help}</p> : null}
+                    <p className="text-[13px] font-medium text-slate-700">{f.label}</p>
+                    {f.help ? <p className="text-[12px] text-slate-400">{f.help}</p> : null}
                   </div>
                   <input type="hidden" name={f.key} value={JSON.stringify(items)} />
                   <ul className="mt-3 flex flex-col gap-3">
                     {items.map((it, i) => (
-                      <li key={i} className="grid gap-2 rounded-2xl border border-black/[0.07] p-3 sm:grid-cols-[200px_1fr_auto]">
+                      <li key={i} className="grid gap-2 rounded-2xl border border-slate-200/80 p-3 sm:grid-cols-[200px_1fr_auto]">
                         <Input aria-label={f.titleLabel ?? "Title"} placeholder={f.titleLabel ?? "Title"} value={it.title} maxLength={40} onChange={(e) => set(items.map((x, k) => (k === i ? { ...x, title: e.target.value } : x)))} />
                         <Input aria-label={f.descriptionLabel ?? "Description"} placeholder={f.descriptionLabel ?? "One sentence"} value={it.description} maxLength={160} onChange={(e) => set(items.map((x, k) => (k === i ? { ...x, description: e.target.value } : x)))} />
                         <div className="flex gap-1">
@@ -79,13 +79,13 @@ export function SettingsForm({ settings, sections, submitLabel = "Save changes" 
               return (
                 <div key={f.key} id="add">
                   <div className="flex items-baseline justify-between">
-                    <p className="text-[13px] font-medium text-[#333]">{f.label}</p>
-                    {f.help ? <p className="text-[12px] text-[#8a8a8a]">{f.help}</p> : null}
+                    <p className="text-[13px] font-medium text-slate-700">{f.label}</p>
+                    {f.help ? <p className="text-[12px] text-slate-400">{f.help}</p> : null}
                   </div>
                   <input type="hidden" name="journey" value={JSON.stringify(journey)} />
                   <ol className="mt-3 flex flex-col gap-3">
                     {journey.map((j, i) => (
-                      <li key={i} className="grid gap-2 rounded-2xl border border-black/[0.07] p-3 sm:grid-cols-[130px_1fr_auto]">
+                      <li key={i} className="grid gap-2 rounded-2xl border border-slate-200/80 p-3 sm:grid-cols-[130px_1fr_auto]">
                         <Input aria-label="Period" placeholder="Year 1" value={j.period} maxLength={30} onChange={(e) => setJourney(journey.map((x, k) => (k === i ? { ...x, period: e.target.value } : x)))} />
                         <div className="flex flex-col gap-2">
                           <Input aria-label="Title" placeholder="Title" value={j.title} maxLength={80} onChange={(e) => setJourney(journey.map((x, k) => (k === i ? { ...x, title: e.target.value } : x)))} />
@@ -120,7 +120,7 @@ export function SettingsForm({ settings, sections, submitLabel = "Save changes" 
       ))}
 
       <div className="flex items-center justify-end gap-3">
-        <p className="text-[12px] text-[#8a8a8a]">Changes go live on the site within seconds.</p>
+        <p className="text-[12px] text-slate-400">Changes go live on the site within seconds.</p>
         <Button type="submit" variant="primary" disabled={pending} aria-busy={pending}>{pending ? "Saving…" : submitLabel}</Button>
       </div>
     </form>

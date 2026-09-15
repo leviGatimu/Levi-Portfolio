@@ -30,9 +30,9 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
         title="Analytics"
         description="Page views collected by the site itself: path, referring site, country and device class. No cookies, no IP addresses."
         action={
-          <nav aria-label="Range" className="flex rounded-full border border-black/[0.1] bg-white p-1">
+          <nav aria-label="Range" className="flex rounded-full border border-slate-200 bg-white p-1">
             {RANGES.map((r) => (
-              <Link key={r} href={`/admin/analytics?range=${r}`} aria-current={days === r ? "page" : undefined} className={cn("rounded-full px-4 py-2 text-[13px] font-medium", days === r ? "bg-[#111] text-white" : "text-[#555] hover:bg-[#f2f2f4]")}>
+              <Link key={r} href={`/admin/analytics?range=${r}`} aria-current={days === r ? "page" : undefined} className={cn("rounded-full px-4 py-2 text-[13px] font-medium", days === r ? "bg-blue-600 text-white" : "text-slate-600 hover:bg-blue-50")}>
                 {r} days
               </Link>
             ))}
@@ -40,7 +40,7 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
         }
       />
 
-      {!a.available ? <Card><p className="text-[13px] text-[#555]">Run backend/migrations/0006_analytics_and_journey.sql to enable analytics.</p></Card> : null}
+      {!a.available ? <Card><p className="text-[13px] text-slate-600">Run backend/migrations/0006_analytics_and_journey.sql to enable analytics.</p></Card> : null}
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatTile label={`Views, ${days} days`} value={a.totalViews} delta={pct(a.totalViews, a.previousViews)} icon={<Eye size={17} />} />

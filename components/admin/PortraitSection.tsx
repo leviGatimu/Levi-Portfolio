@@ -22,15 +22,15 @@ export function PortraitSection({ settings, icon }: { settings: SiteSettingsRow;
 function PortraitSlot({ slot, path, alt, label, hint }: { slot: "home" | "about"; path: string | null; alt: string; label: string; hint: string }) {
   const [state, action, pending] = useActionState(uploadPortrait.bind(null, slot), undefined);
   return (
-    <div className="rounded-2xl border border-black/[0.07] p-4">
-      <p className="text-[13px] font-medium text-[#111]">{label}</p>
-      <p className="mt-0.5 text-[12px] text-[#8a8a8a]">{hint}</p>
+    <div className="rounded-2xl border border-slate-200/80 p-4">
+      <p className="text-[13px] font-medium text-slate-900">{label}</p>
+      <p className="mt-0.5 text-[12px] text-slate-400">{hint}</p>
       <div className="mt-3 flex items-start gap-4">
-        <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-2xl bg-[#f2f2f4]">
+        <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-2xl bg-slate-100">
           <Image src={path ? mediaUrl(path) : "/portrait.png"} alt={alt} fill sizes="112px" className="object-cover" />
         </div>
         <form action={action} className="flex flex-1 flex-col gap-2">
-          <input type="file" name="file" required accept="image/png,image/jpeg,image/webp,image/avif" aria-label={`${label} file`} className="block w-full text-[12px] text-[#555] file:mr-2 file:rounded-full file:border file:border-black/[0.1] file:bg-white file:px-3 file:py-1.5 file:text-[12px] file:font-medium file:text-[#111]" />
+          <input type="file" name="file" required accept="image/png,image/jpeg,image/webp,image/avif" aria-label={`${label} file`} className="block w-full text-[12px] text-slate-600 file:mr-2 file:rounded-full file:border file:border-slate-200 file:bg-white file:px-3 file:py-1.5 file:text-[12px] file:font-medium file:text-slate-900" />
           <div className="flex flex-wrap gap-2">
             <Button type="submit" size="sm" variant="primary" disabled={pending}>{pending ? "Uploading" : "Upload"}</Button>
             {path ? <ActionButton action={() => removePortrait(slot)} size="sm" variant="ghost" confirm="Remove this portrait and go back to the bundled photo?">Remove</ActionButton> : null}

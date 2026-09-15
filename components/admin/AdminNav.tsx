@@ -73,7 +73,7 @@ export function AdminNav({ onNavigate }: { onNavigate?: () => void }) {
     <nav aria-label="Admin" className="flex flex-col gap-5">
       {NAV_GROUPS.map((group) => (
         <div key={group.label}>
-          <p className="px-3 text-[12px] font-medium text-[#8a8a8a]">{group.label}</p>
+          <p className="px-3 text-[12px] font-medium text-slate-400">{group.label}</p>
           <ul className="mt-2 flex flex-col gap-0.5">
             {group.items.map((item) => {
               const active = isActive(item.href, item.exact);
@@ -86,10 +86,10 @@ export function AdminNav({ onNavigate }: { onNavigate?: () => void }) {
                     aria-current={active ? "page" : undefined}
                     className={cn(
                       "flex items-center gap-3 rounded-full px-3 py-2.5 text-[14px] transition-colors",
-                      active ? "bg-[#111] font-medium text-white" : "text-[#333] hover:bg-[#f2f2f4]",
+                      active ? "bg-blue-600 font-medium text-white shadow-[0_8px_20px_-10px_rgba(37,99,235,0.6)]" : "text-slate-700 hover:bg-blue-50",
                     )}
                   >
-                    <Icon size={18} strokeWidth={1.8} className={active ? "text-white" : "text-[#333]"} />
+                    <Icon size={18} strokeWidth={1.8} className={active ? "text-white" : "text-slate-700"} />
                     {item.label}
                   </Link>
                 </li>
@@ -99,10 +99,10 @@ export function AdminNav({ onNavigate }: { onNavigate?: () => void }) {
         </div>
       ))}
       <div>
-        <p className="px-3 text-[12px] font-medium text-[#8a8a8a]">Help</p>
+        <p className="px-3 text-[12px] font-medium text-slate-400">Help</p>
         <ul className="mt-2">
           <li>
-            <a href="https://github.com/leviGatimu/Levi-Portfolio/blob/main/README.md" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-full px-3 py-2.5 text-[14px] text-[#333] hover:bg-[#f2f2f4]">
+            <a href="https://github.com/leviGatimu/Levi-Portfolio/blob/main/README.md" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-full px-3 py-2.5 text-[14px] text-slate-700 hover:bg-blue-50">
               <Compass size={18} strokeWidth={1.8} /> Documentation
             </a>
           </li>
@@ -116,11 +116,11 @@ export function AdminMobileNav() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <button type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open} aria-label={open ? "Close menu" : "Open menu"} className="flex h-10 w-10 items-center justify-center rounded-full border border-black/[0.1] bg-white text-[#333]">
+      <button type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open} aria-label={open ? "Close menu" : "Open menu"} className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700">
         {open ? <X size={18} /> : <Menu size={18} />}
       </button>
       {open ? (
-        <div className="absolute left-0 top-full z-40 max-h-[80vh] w-full overflow-y-auto border-b border-black/[0.07] bg-white p-4 shadow-xl lg:hidden">
+        <div className="absolute left-0 top-full z-40 max-h-[80vh] w-full overflow-y-auto border-b border-slate-200/80 bg-white p-4 shadow-xl lg:hidden">
           <AdminNav onNavigate={() => setOpen(false)} />
         </div>
       ) : null}

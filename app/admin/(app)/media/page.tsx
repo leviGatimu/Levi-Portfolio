@@ -26,10 +26,10 @@ export default async function MediaPage() {
         <div className="flex flex-wrap gap-4">
           {[settings?.portrait_home_path, settings?.portrait_about_path].map((p, i) => (
             <div key={i} className="w-36">
-              <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#f2f2f4]">
+              <div className="relative aspect-square overflow-hidden rounded-2xl bg-slate-100">
                 <Image src={p ? mediaUrl(p) : "/portrait.png"} alt={settings?.portrait_alt ?? ""} fill sizes="144px" className="object-cover" />
               </div>
-              <p className="mt-2 text-[12px] font-medium text-[#555]">{i === 0 ? "Home" : "About"}{p ? "" : " (bundled)"}</p>
+              <p className="mt-2 text-[12px] font-medium text-slate-600">{i === 0 ? "Home" : "About"}{p ? "" : " (bundled)"}</p>
             </div>
           ))}
         </div>
@@ -37,19 +37,19 @@ export default async function MediaPage() {
 
       <Card title="Project images" icon={<Images size={18} />}>
         {rows.length === 0 ? (
-          <p className="text-[13px] text-[#555]">No images yet. Open a project and upload screenshots there.</p>
+          <p className="text-[13px] text-slate-600">No images yet. Open a project and upload screenshots there.</p>
         ) : (
           <ul className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
             {rows.map((img) => (
-              <li key={img.id} className="overflow-hidden rounded-2xl border border-black/[0.07] bg-white">
-                <div className="relative aspect-[16/10] bg-[#f2f2f4]">
+              <li key={img.id} className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white">
+                <div className="relative aspect-[16/10] bg-slate-100">
                   <Image src={mediaUrl(img.storage_path)} alt={img.alt} fill sizes="320px" className="object-cover object-top" />
                   {img.is_cover ? <span className="absolute left-2 top-2"><Badge tone="accent">Cover</Badge></span> : null}
                 </div>
                 <div className="p-3">
-                  <p className="truncate text-[13px] font-medium text-[#111]" title={img.alt}>{img.alt}</p>
-                  <p className="mt-0.5 text-[12px] text-[#8a8a8a]">{img.width}x{img.height} · {(img.bytes / 1024).toFixed(0)} KB · {formatDate(img.created_at)}</p>
-                  {img.projects ? <Link href={`/admin/projects/${img.projects.id}`} className="mt-2 inline-block text-[12px] font-medium text-[#111] underline-offset-2 hover:underline">{img.projects.name}</Link> : null}
+                  <p className="truncate text-[13px] font-medium text-slate-900" title={img.alt}>{img.alt}</p>
+                  <p className="mt-0.5 text-[12px] text-slate-400">{img.width}x{img.height} · {(img.bytes / 1024).toFixed(0)} KB · {formatDate(img.created_at)}</p>
+                  {img.projects ? <Link href={`/admin/projects/${img.projects.id}`} className="mt-2 inline-block text-[12px] font-medium text-slate-900 underline-offset-2 hover:underline">{img.projects.name}</Link> : null}
                 </div>
               </li>
             ))}

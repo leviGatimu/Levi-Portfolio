@@ -38,7 +38,7 @@ export default async function ProjectsPage({ searchParams }: { searchParams: Pro
     for (const [k, v] of Object.entries({ ...sp, ...params })) if (v) qs.set(k, v);
     const href = qs.toString() ? `/admin/projects?${qs}` : "/admin/projects";
     return (
-      <Link key={label} href={href} aria-current={active ? "page" : undefined} className={cn("rounded-full px-3.5 py-1.5 text-[13px] font-medium", active ? "bg-[#111] text-white" : "border border-black/[0.1] bg-white text-[#555] hover:bg-[#f2f2f4]")}>
+      <Link key={label} href={href} aria-current={active ? "page" : undefined} className={cn("rounded-full px-3.5 py-1.5 text-[13px] font-medium", active ? "bg-blue-600 text-white" : "border border-slate-200 bg-white text-slate-600 hover:bg-blue-50")}>
         {label}
       </Link>
     );
@@ -50,11 +50,11 @@ export default async function ProjectsPage({ searchParams }: { searchParams: Pro
       <PageHeader
         title="Projects"
         description={`${stats.total} total, ${stats.published} published, ${stats.featured} featured. Use the arrows to order; featured projects lead the home page.`}
-        action={<Link href="/admin/projects/new" className="inline-flex h-11 items-center gap-2 rounded-full bg-[#111] px-5 text-[14px] font-medium text-white hover:bg-black"><Plus size={16} /> New project</Link>}
+        action={<Link href="/admin/projects/new" className="inline-flex h-11 items-center gap-2 rounded-full bg-blue-600 px-5 text-[14px] font-medium text-white hover:bg-blue-700"><Plus size={16} /> New project</Link>}
       />
 
       <Card title="All projects" icon={<FolderKanban size={18} />} subtitle={q ? `Search: "${q}"` : undefined} bodyClassName="p-0 sm:p-0">
-        <div className="flex flex-wrap gap-2 border-b border-black/[0.06] px-5 py-3.5">
+        <div className="flex flex-wrap gap-2 border-b border-slate-100 px-5 py-3.5">
           {filterLink("All", { state: undefined, featured: undefined, type: undefined }, !sp.state && !sp.featured && !sp.type)}
           {filterLink("Drafts", { state: "draft" }, sp.state === "draft")}
           {filterLink("Published", { state: "published" }, sp.state === "published")}
@@ -65,29 +65,29 @@ export default async function ProjectsPage({ searchParams }: { searchParams: Pro
 
         {projects.length === 0 ? (
           <div className="p-10 text-center">
-            <p className="text-[15px] font-semibold text-[#111]">{stats.total === 0 ? "No projects yet" : "Nothing matches these filters"}</p>
-            <p className="mt-1 text-[13px] text-[#777]">{stats.total === 0 ? "Create the first one. It starts as a draft; nothing is public until you publish." : "Try clearing the filters."}</p>
+            <p className="text-[15px] font-semibold text-slate-900">{stats.total === 0 ? "No projects yet" : "Nothing matches these filters"}</p>
+            <p className="mt-1 text-[13px] text-slate-500">{stats.total === 0 ? "Create the first one. It starts as a draft; nothing is public until you publish." : "Try clearing the filters."}</p>
           </div>
         ) : (
-          <ul className="divide-y divide-black/[0.06]">
+          <ul className="divide-y divide-slate-100">
             {projects.map((p, i) => {
               const cover = p.project_images.find((img) => img.is_cover) ?? p.project_images[0];
               return (
                 <li key={p.id} className="flex flex-col gap-3 px-5 py-4 md:flex-row md:items-center">
-                  <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-xl bg-[#f2f2f4]">
-                    {cover ? <Image src={mediaUrl(cover.storage_path)} alt={cover.alt} fill sizes="80px" className="object-cover object-top" /> : <span className="flex h-full items-center justify-center text-[10px] font-medium text-[#9a9a9a]">No cover</span>}
+                  <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-xl bg-slate-100">
+                    {cover ? <Image src={mediaUrl(cover.storage_path)} alt={cover.alt} fill sizes="80px" className="object-cover object-top" /> : <span className="flex h-full items-center justify-center text-[10px] font-medium text-slate-400">No cover</span>}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <Link href={`/admin/projects/${p.id}`} className="text-[15px] font-semibold text-[#111] hover:underline">{p.name}</Link>
+                      <Link href={`/admin/projects/${p.id}`} className="text-[15px] font-semibold text-slate-900 hover:underline">{p.name}</Link>
                       {p.is_published ? <Badge tone="success">Published</Badge> : <Badge>Draft</Badge>}
                       {p.is_featured ? <Badge tone="accent">Featured</Badge> : null}
                     </div>
-                    <p className="mt-1 text-[12px] text-[#8a8a8a]">/work/{p.slug} · {TYPE_LABEL[p.type]} · {p.year} · {STATUS_LABEL[p.status]} · {p.project_images.length} image{p.project_images.length === 1 ? "" : "s"} · edited {formatDate(p.updated_at)}</p>
+                    <p className="mt-1 text-[12px] text-slate-400">/work/{p.slug} · {TYPE_LABEL[p.type]} · {p.year} · {STATUS_LABEL[p.status]} · {p.project_images.length} image{p.project_images.length === 1 ? "" : "s"} · edited {formatDate(p.updated_at)}</p>
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
                     <ProjectRowActions id={p.id} isFirst={i === 0} isLast={i === projects.length - 1} isFeatured={p.is_featured} isPublished={p.is_published} />
-                    <Link href={`/admin/projects/${p.id}`} className="inline-flex h-9 items-center rounded-full border border-black/[0.1] bg-white px-4 text-[13px] font-medium text-[#111] hover:bg-[#f2f2f4]">Edit</Link>
+                    <Link href={`/admin/projects/${p.id}`} className="inline-flex h-9 items-center rounded-full border border-slate-200 bg-white px-4 text-[13px] font-medium text-slate-900 hover:bg-blue-50">Edit</Link>
                   </div>
                 </li>
               );

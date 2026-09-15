@@ -1,15 +1,20 @@
 "use client";
 
-import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 
 /**
- * Wraps the app in buttery inertial scrolling. Lenis still drives the native
- * scroll position, so framer-motion's useScroll keeps working everywhere.
+ * Inertial scrolling via Lenis. Lenis drives the native scroll position, so
+ * framer-motion's useScroll keeps working. On every route change the page is
+ * reset to the top (Lenis would otherwise keep the previous position).
  */
 export default function SmoothScroll() {
+  const lenisRef = useRef<Lenis | null>(null);
+  const pathname = usePathname();
+
   useEffect(() => {
-    // Respect users who prefer reduced motion.
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const lenis = new Lenis({
@@ -18,6 +23,7 @@ export default function SmoothScroll() {
       smoothWheel: true,
       touchMultiplier: 1.6,
     });
+    lenisRef.current = lenis;
 
     let raf = 0;
     const loop = (time: number) => {
@@ -26,7 +32,7 @@ export default function SmoothScroll() {
     };
     raf = requestAnimationFrame(loop);
 
-    // Smoothly route in-page anchor links through Lenis.
+    // Route in-page anchor links through Lenis.
     const onClick = (e: MouseEvent) => {
       const target = (e.target as HTMLElement)?.closest('a[href^="/#"], a[href^="#"]');
       if (!target) return;
@@ -44,8 +50,24 @@ export default function SmoothScroll() {
       cancelAnimationFrame(raf);
       document.removeEventListener("click", onClick);
       lenis.destroy();
+      lenisRef.current = null;
     };
   }, []);
+
+  // New page: start at the top, unless the URL targets an anchor.
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const el = document.getElementById(hash.slice(1));
+      if (el) {
+        if (lenisRef.current) lenisRef.current.scrollTo(el, { offset: -80, immediate: true });
+        else el.scrollIntoView();
+        return;
+      }
+    }
+    if (lenisRef.current) lenisRef.current.scrollTo(0, { immediate: true, force: true });
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return null;
 }

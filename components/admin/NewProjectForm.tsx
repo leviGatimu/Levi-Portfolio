@@ -24,7 +24,7 @@ export function NewProjectForm() {
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
-      <form action={action} className="flex flex-col gap-6 rounded-[18px] border border-black/[0.07] bg-white p-5 sm:p-6">
+      <form action={action} className="flex flex-col gap-6 rounded-[18px] border border-slate-200/80 bg-white p-5 sm:p-6">
         {state && !state.ok ? <Notice tone="danger">{state.message}</Notice> : null}
         <Field label="Project name" htmlFor="name" required error={errors.name}>
           <Input
@@ -78,23 +78,23 @@ export function NewProjectForm() {
         <Field label="Summary" htmlFor="summary" help="Two or three sentences. Optional now, required to publish." count={{ value: summary.length, max: 400 }} error={errors.summary}>
           <Textarea id="summary" name="summary" value={summary} onChange={(e) => setSummary(e.target.value)} maxLength={450} />
         </Field>
-        <div className="flex items-center justify-between border-t border-black/[0.06] pt-5">
-          <p className="text-[12px] text-[#8a8a8a]">Saved as a draft. Nothing is public until you publish.</p>
+        <div className="flex items-center justify-between border-t border-slate-100 pt-5">
+          <p className="text-[12px] text-slate-400">Saved as a draft. Nothing is public until you publish.</p>
           <Button type="submit" variant="primary" disabled={pending} aria-busy={pending}>
             {pending ? "Creating…" : "Create draft and continue"}
           </Button>
         </div>
       </form>
 
-      <aside className="rounded-[18px] border border-black/[0.07] bg-white p-5">
-        <p className="text-[15px] font-semibold text-[#111]">How it works</p>
+      <aside className="rounded-[18px] border border-slate-200/80 bg-white p-5">
+        <p className="text-[15px] font-semibold text-slate-900">How it works</p>
         <ol className="mt-4 space-y-4">
           {STEPS.map((s, i) => (
             <li key={s.n} className="flex gap-3">
-              <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${i === 0 ? "bg-[#111] text-white" : "bg-[#f2f2f4] text-[#777]"}`}>{s.n}</span>
+              <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${i === 0 ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-500"}`}>{s.n}</span>
               <div>
-                <p className="text-[13px] font-medium text-[#111]">{s.title}</p>
-                <p className="text-[12px] leading-relaxed text-[#8a8a8a]">{s.text}</p>
+                <p className="text-[13px] font-medium text-slate-900">{s.title}</p>
+                <p className="text-[12px] leading-relaxed text-slate-400">{s.text}</p>
               </div>
             </li>
           ))}

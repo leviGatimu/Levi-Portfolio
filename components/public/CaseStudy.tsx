@@ -7,6 +7,7 @@ import { coverOf, techsOf } from "@/lib/db/public";
 import { mediaUrl } from "@/lib/supabase/env";
 import { STATUS_LABEL, TYPE_LABEL } from "@/lib/utils/format";
 import { TechLogo } from "@/components/shared/TechLogo";
+import { Gallery } from "./Gallery";
 import { ProjectCard } from "./ProjectCard";
 import ScrollReveal from "./ScrollReveal";
 
@@ -34,8 +35,9 @@ export function CaseStudy({ project, next, position, preview = false }: Props) {
   const cover = coverOf(project);
   const techs = techsOf(project);
   const bodyImages: ImageDimensions = Object.fromEntries(project.project_images.map((i) => [mediaUrl(i.storage_path), { width: i.width, height: i.height, alt: i.alt }]));
-  const referenced = new Set(project.project_images.filter((i) => project.body_md.includes(mediaUrl(i.storage_path))).map((i) => i.id));
-  const gallery = project.project_images.filter((i) => !i.is_cover && !referenced.has(i.id));
+  const gallery = project.project_images
+    .filter((i) => !i.is_cover)
+    .map((i) => ({ id: i.id, src: mediaUrl(i.storage_path), alt: i.alt, caption: i.caption, width: i.width, height: i.height }));
   const video = project.video_url ? embedUrl(project.video_url) : null;
 
   const meta = [
@@ -104,11 +106,11 @@ export function CaseStudy({ project, next, position, preview = false }: Props) {
       {/* Hero image */}
       {cover ? (
         <section className="px-6 pb-8">
-          <ScrollReveal className="relative mx-auto max-w-7xl">
+          <ScrollReveal className="relative mx-auto max-w-5xl">
             <div className="absolute -inset-4 -z-10 rounded-[2.5rem] bg-blue-300/30 blur-2xl dark:bg-blue-600/20" />
             <figure>
-              <div className={`relative overflow-hidden rounded-[2rem] border border-black/[0.06] bg-white shadow-[0_40px_80px_-40px_rgba(15,23,42,0.5)] dark:border-white/10 ${project.cover_aspect === "4:5" ? "mx-auto aspect-[4/5] max-w-[560px]" : "aspect-[16/10]"}`}>
-                <Image src={mediaUrl(cover.storage_path)} alt={cover.alt} fill priority sizes="(min-width: 1280px) 1280px, 100vw" className="object-cover object-top" />
+              <div className={`relative overflow-hidden rounded-[1.75rem] border border-black/[0.06] bg-white shadow-[0_40px_80px_-40px_rgba(15,23,42,0.5)] dark:border-white/10 ${project.cover_aspect === "4:5" ? "mx-auto aspect-[4/5] max-w-[440px]" : "aspect-[16/9]"}`}>
+                <Image src={mediaUrl(cover.storage_path)} alt={cover.alt} fill priority sizes="(min-width: 1024px) 1024px, 100vw" className="object-cover object-top" />
               </div>
               {cover.caption ? <figcaption className="mt-4 text-center text-sm text-slate-400">{cover.caption}</figcaption> : null}
             </figure>
@@ -158,21 +160,7 @@ export function CaseStudy({ project, next, position, preview = false }: Props) {
         </div>
       </section>
 
-      {/* Gallery */}
-      {gallery.length > 0 ? (
-        <section className="px-6 pb-16" aria-label="Gallery">
-          <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-2">
-            {gallery.map((img, i) => (
-              <ScrollReveal key={img.id} delay={(i % 2) * 0.08} className={img.is_wide ? "md:col-span-2" : ""}>
-                <figure className="overflow-hidden rounded-[1.9rem] border border-black/[0.06] bg-white p-3 shadow-[0_28px_60px_-34px_rgba(15,23,42,0.3)] dark:border-white/10 dark:bg-slate-900">
-                  <Image src={mediaUrl(img.storage_path)} alt={img.alt} width={img.width} height={img.height} sizes={img.is_wide ? "(min-width: 1280px) 1280px, 100vw" : "(min-width: 768px) 640px, 100vw"} className="h-auto w-full rounded-[1.3rem]" />
-                  {img.caption ? <figcaption className="px-3 pb-2 pt-4 text-sm text-slate-500 dark:text-slate-400">{img.caption}</figcaption> : null}
-                </figure>
-              </ScrollReveal>
-            ))}
-          </div>
-        </section>
-      ) : null}
+      <Gallery images={gallery} />
 
       {/* Next */}
       {next && next.id !== project.id ? (
