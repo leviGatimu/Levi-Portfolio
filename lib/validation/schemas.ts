@@ -60,6 +60,7 @@ export const technologySchema = z.object({
   slug: slugSchema,
   group: z.enum(["language", "frontend", "backend", "database", "ai", "robotics", "embedded", "desktop", "devops", "design", "hardware"]),
   proficiency: z.union([z.enum(["strong", "comfortable", "learning", "experimental"]), z.literal("")]),
+  icon: z.string().trim().max(200).regex(/^(https:\/\/\S+|[a-z0-9.-]*)$/, "A Simple Icons slug (e.g. nextdotjs) or an https:// image URL"),
   show_on_about: z.boolean(),
 });
 

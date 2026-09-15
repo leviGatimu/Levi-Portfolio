@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import { createTechnology, deleteTechnology, moveTechnology, updateTechnology } from "@/lib/actions/technologies";
 import { GROUP_LABEL, PROFICIENCY_LABEL } from "@/lib/utils/format";
 import type { Proficiency, TechGroup, TechnologyRow } from "@/types/database";
+import { TechLogo } from "@/components/shared/TechLogo";
 import { ActionButton } from "./ActionButton";
 import { Button, Field, Input, Notice, Select } from "./ui";
 
@@ -22,9 +23,12 @@ export function TechnologiesAdmin({ technologies, usage }: Props) {
       <form action={action} className="rounded-[4px] border border-rule p-5">
         <p className="meta text-fg-muted">Add technology</p>
         {state ? <Notice tone={state.ok ? "success" : "danger"} className="mt-3">{state.ok ? (state.message ?? "Added") : state.message}</Notice> : null}
-        <div className="mt-4 grid gap-4 sm:grid-cols-[1fr_180px_180px_auto] sm:items-end">
+        <div className="mt-4 grid gap-4 sm:grid-cols-[1fr_160px_150px_150px_auto] sm:items-end">
           <Field label="Name" htmlFor="new-name" required>
             <Input id="new-name" name="name" required maxLength={60} placeholder="e.g. MapLibre GL" />
+          </Field>
+          <Field label="Logo" htmlFor="new-icon" help="simpleicons.org slug">
+            <Input id="new-icon" name="icon" placeholder="e.g. nextdotjs" />
           </Field>
           <Field label="Group" htmlFor="new-group">
             <Select id="new-group" name="group" defaultValue="frontend">
@@ -63,6 +67,7 @@ function TechRow({ tech, used, isFirst, isLast }: { tech: TechnologyRow; used: n
   if (!editing) {
     return (
       <li className="flex flex-wrap items-center gap-x-4 gap-y-2 py-3">
+        <TechLogo name={tech.name} icon={tech.icon} size={22} />
         <span className="min-w-40 text-small text-fg">{tech.name}</span>
         <span className="meta text-fg-subtle">{tech.proficiency ? PROFICIENCY_LABEL[tech.proficiency] : "not rated"}</span>
         <span className="meta text-fg-subtle">{tech.show_on_about ? "on About" : "hidden"}</span>
@@ -86,12 +91,15 @@ function TechRow({ tech, used, isFirst, isLast }: { tech: TechnologyRow; used: n
           action(fd);
           setEditing(false);
         }}
-        className="grid gap-3 sm:grid-cols-[1fr_160px_160px_auto_auto] sm:items-end"
+        className="grid gap-3 sm:grid-cols-[1fr_150px_150px_140px_auto_auto] sm:items-end"
       >
         <Field label="Name" htmlFor={`name-${tech.id}`}>
           <Input id={`name-${tech.id}`} name="name" defaultValue={tech.name} required />
         </Field>
         <input type="hidden" name="slug" value={tech.slug} />
+        <Field label="Logo" htmlFor={`icon-${tech.id}`} help="Slug from simpleicons.org or an https:// image URL">
+          <Input id={`icon-${tech.id}`} name="icon" defaultValue={tech.icon ?? ""} placeholder="nextdotjs" />
+        </Field>
         <Field label="Group" htmlFor={`group-${tech.id}`}>
           <Select id={`group-${tech.id}`} name="group" defaultValue={tech.group}>
             {GROUPS.map((g) => <option key={g} value={g}>{GROUP_LABEL[g]}</option>)}
@@ -110,7 +118,7 @@ function TechRow({ tech, used, isFirst, isLast }: { tech: TechnologyRow; used: n
           <Button type="submit" size="sm" variant="primary" disabled={pending}>Save</Button>
           <Button size="sm" variant="ghost" onClick={() => setEditing(false)}>Cancel</Button>
         </div>
-        {state && !state.ok ? <p className="text-xs text-danger sm:col-span-5">{state.message}</p> : null}
+        {state && !state.ok ? <p className="text-xs text-danger sm:col-span-6">{state.message}</p> : null}
       </form>
     </li>
   );

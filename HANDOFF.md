@@ -14,7 +14,7 @@ Solved (V1 code complete) — 2026-09-15. `npm run build`, `typecheck`, `lint` a
 - [x] Admin: login (rate-limited), proxy + `requireAdmin` + RLS, projects list (search/filter/reorder/feature/publish), project editor (all fields, tech picker with quick-add, links, collaborators, markdown with template + preview), image upload (sniff/size/dimension checks, EXIF strip, UUID paths, cover/gallery/wide/caption/reorder/delete, copy Markdown), publish validation panel, delete with name confirmation, technologies CRUD, site settings + portraits + JSON export, draft preview route
 - [x] Migrations 0001–0003 applied by Levi (verified via REST 2026-09-15); auth user getmorelev@gmail.com created
 - [x] Levi logged in and published the first project (Tembera Rwanda)
-- [ ] Levi: run `backend/migrations/0005_site_copy.sql` (if not yet) and `0006_analytics_and_journey.sql` (analytics + journey)
+- [ ] Levi: run `backend/migrations/0005_site_copy.sql` (if not yet) and `0006_analytics_and_journey.sql` (analytics + journey) and `0007_technology_icons.sql` (logos)
 - [ ] Levi: connect the repo to Vercel with the three env vars (`NEXT_PUBLIC_SITE_URL` = the `*.vercel.app` URL)
 - [ ] Nice-to-have later: e2e tests (Playwright is installed as `playwright-core`; `scripts/screenshot.mjs` drives the system Edge), Lighthouse pass with real content, TOTP MFA
 
@@ -30,6 +30,7 @@ Solved (V1 code complete) — 2026-09-15. `npm run build`, `typecheck`, `lint` a
 - Next step on resume: if migrations are applied, log in at `/admin/login`, create a real project end-to-end (upload → publish) and confirm it appears on `/`; then deploy to Vercel and run Lighthouse on the preview URL.
 
 ## Recently Completed
+- 2026-09-15: technology logos everywhere (Simple Icons CDN via `TechLogo`, `technologies.icon` column, migration 0007), home Toolbox logo wall, logos on cards, case studies, Skills and About.
 - 2026-09-15 (late night): admin rebuilt as a light dashboard (sidebar + header; Dashboard, Projects, Analytics, Media, Technologies, Site) with first-party cookieless analytics (migration 0006, `/api/view`, `lib/db/admin.ts`, SVG charts), guided project creation with a completeness meter; public site gained Experiments, Journey, Skills, Now and Contact pages.
 - 2026-09-15 (night): public site rebuilt as a rebranded copy of the Study Tracker website design (D27); photo `public/portrait.png` used as rounded cards; dashes rule kept.
 - 2026-09-15 (late): fixed client crash (NEXT_PUBLIC_ env read dynamically), cutout portrait from image.svg in the hero, word-reveal/count-up/marquee/tilt animations, richer home (intro bio, How I work, Beyond software), all em dashes removed, migration 0005 for descriptive copy.

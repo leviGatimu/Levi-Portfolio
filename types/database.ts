@@ -61,6 +61,7 @@ export type TechnologyRow = {
   name: string;
   group: TechGroup;
   proficiency: Proficiency | null;
+  icon: string | null;
   show_on_about: boolean;
   sort_order: number;
   created_at: string;

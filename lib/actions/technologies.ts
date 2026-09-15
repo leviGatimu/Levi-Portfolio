@@ -13,6 +13,7 @@ function parse(formData: FormData) {
     slug: String(formData.get("slug") ?? "") || slugify(name),
     group: formData.get("group"),
     proficiency: formData.get("proficiency") ?? "",
+    icon: formData.get("icon") ?? "",
     show_on_about: formData.get("show_on_about") === "on",
   });
 }
@@ -21,9 +22,9 @@ export async function createTechnology(_prev: ActionResult | undefined, formData
   const { supabase } = await requireAdmin();
   const parsed = parse(formData);
   if (!parsed.success) return fail(parsed.error.issues[0]?.message ?? "Invalid technology");
-  const { proficiency, ...rest } = parsed.data;
+  const { proficiency, icon, ...rest } = parsed.data;
   const { data: max } = await supabase.from("technologies").select("sort_order").eq("group", rest.group).order("sort_order", { ascending: false }).limit(1).maybeSingle();
-  const { error } = await supabase.from("technologies").insert({ ...rest, proficiency: proficiency || null, sort_order: (max?.sort_order ?? 0) + 10 });
+  const { error } = await supabase.from("technologies").insert({ ...rest, proficiency: proficiency || null, icon: icon || null, sort_order: (max?.sort_order ?? 0) + 10 });
   if (error) return fail(error.code === "23505" ? "A technology with that slug already exists." : error.message);
   revalidatePublic();
   return { ok: true, data: undefined, message: `Added ${rest.name}` };
@@ -32,7 +33,7 @@ export async function createTechnology(_prev: ActionResult | undefined, formData
 /** Quick add from the project editor: name + group only. Returns the new id. */
 export async function quickAddTechnology(name: string, group: string): Promise<ActionResult<{ id: string; name: string }>> {
   const { supabase } = await requireAdmin();
-  const parsed = technologySchema.safeParse({ name, slug: slugify(name), group, proficiency: "", show_on_about: true });
+  const parsed = technologySchema.safeParse({ name, slug: slugify(name), group, proficiency: "", icon: "", show_on_about: true });
   if (!parsed.success) return fail(parsed.error.issues[0]?.message ?? "Invalid technology");
   const { name: techName, slug, group: techGroup, show_on_about } = parsed.data;
   const { data, error } = await supabase
@@ -48,8 +49,8 @@ export async function updateTechnology(id: string, _prev: ActionResult | undefin
   const { supabase } = await requireAdmin();
   const parsed = parse(formData);
   if (!parsed.success) return fail(parsed.error.issues[0]?.message ?? "Invalid technology");
-  const { proficiency, ...rest } = parsed.data;
-  const { error } = await supabase.from("technologies").update({ ...rest, proficiency: proficiency || null }).eq("id", id);
+  const { proficiency, icon, ...rest } = parsed.data;
+  const { error } = await supabase.from("technologies").update({ ...rest, proficiency: proficiency || null, icon: icon || null }).eq("id", id);
   if (error) return fail(error.message);
   revalidatePublic();
   return { ok: true, data: undefined, message: "Saved" };

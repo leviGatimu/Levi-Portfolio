@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Wrench } from "lucide-react";
 import { ClosingCta } from "@/components/public/HomeSections";
 import ScrollReveal from "@/components/public/ScrollReveal";
+import { TechLogo } from "@/components/shared/TechLogo";
 import { getAllTechnologies, getPublishedProjects, getSiteSettings } from "@/lib/db/public";
 import { GROUP_LABEL, PROFICIENCY_LABEL } from "@/lib/utils/format";
 import type { Proficiency, TechGroup, TechnologyRow } from "@/types/database";
@@ -58,7 +59,7 @@ export default async function SkillsPage() {
               <span className="eyebrow">Core stack</span>
               <div className="mt-5 flex flex-wrap gap-2.5">
                 {strong.map((t) => (
-                  <span key={t.id} className="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_24px_-10px_rgba(37,99,235,0.7)]">{t.name}</span>
+                  <span key={t.id} className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-sm font-semibold text-slate-800 shadow-[0_10px_24px_-14px_rgba(15,23,42,0.5)] ring-1 ring-black/[0.06] dark:bg-slate-800 dark:text-slate-100 dark:ring-white/10"><TechLogo name={t.name} icon={t.icon} size={18} />{t.name}</span>
                 ))}
               </div>
             </div>
@@ -77,7 +78,8 @@ export default async function SkillsPage() {
                     const n = usage.get(t.id) ?? 0;
                     return (
                       <li key={t.id} className="flex items-center justify-between gap-4 py-2.5">
-                        <span>
+                        <span className="inline-flex items-center gap-2.5">
+                          <TechLogo name={t.name} icon={t.icon} size={20} />
                           <span className="font-medium text-slate-800 dark:text-slate-100">{t.name}</span>
                           {n > 0 ? <span className="ml-2 text-xs text-slate-400">{n} project{n === 1 ? "" : "s"}</span> : null}
                         </span>

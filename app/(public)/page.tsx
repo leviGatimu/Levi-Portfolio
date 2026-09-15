@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Hero from "@/components/public/Hero";
-import { Beyond, ClosingCta, Meet, ProjectGrid, SelectedWork, WhatIDo } from "@/components/public/HomeSections";
+import { Beyond, ClosingCta, Meet, ProjectGrid, SelectedWork, Toolbox, WhatIDo } from "@/components/public/HomeSections";
 import { getAllTechnologies, getPublishedProjects, getSiteSettings } from "@/lib/db/public";
 import { mediaUrl } from "@/lib/supabase/env";
 import { SITE_URL } from "@/lib/utils/site";
@@ -51,6 +51,7 @@ export default async function HomePage() {
       <WhatIDo />
       <SelectedWork projects={ordered} />
       <ProjectGrid projects={ordered.slice(0, 6)} />
+      <Toolbox technologies={technologies} />
       <Beyond settings={settings} />
       <ClosingCta settings={settings} />
     </div>

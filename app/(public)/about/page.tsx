@@ -5,6 +5,7 @@ import { FeatureCard } from "@/components/public/FeatureCard";
 import { ClosingCta } from "@/components/public/HomeSections";
 import ScrollReveal from "@/components/public/ScrollReveal";
 import { Prose } from "@/components/shared/Prose";
+import { TechLogo } from "@/components/shared/TechLogo";
 import { getPublishedProjects, getSiteSettings, getTechnologiesForAbout } from "@/lib/db/public";
 import { mediaUrl } from "@/lib/supabase/env";
 import { GROUP_LABEL, PROFICIENCY_LABEL, formatDate } from "@/lib/utils/format";
@@ -172,7 +173,7 @@ export default async function AboutPage() {
                     <ul className="mt-5 divide-y divide-black/[0.06] dark:divide-white/10">
                       {(grouped.get(g) ?? []).map((t) => (
                         <li key={t.id} className="flex items-baseline justify-between gap-4 py-2.5">
-                          <span className="font-medium text-slate-800 dark:text-slate-100">{t.name}</span>
+                          <span className="inline-flex items-center gap-2.5 font-medium text-slate-800 dark:text-slate-100"><TechLogo name={t.name} icon={t.icon} size={18} />{t.name}</span>
                           <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400">{t.proficiency ? PROFICIENCY_LABEL[t.proficiency] : ""}</span>
                         </li>
                       ))}

@@ -5,6 +5,7 @@ import type { ProjectWithRelations } from "@/types/database";
 import { coverOf, techsOf } from "@/lib/db/public";
 import { mediaUrl } from "@/lib/supabase/env";
 import { STATUS_LABEL, TYPE_LABEL } from "@/lib/utils/format";
+import { TechLogo } from "@/components/shared/TechLogo";
 
 const BLOBS = [
   "42% 58% 63% 37% / 41% 44% 56% 59%",
@@ -48,9 +49,14 @@ export function ProjectCard({ project, index = 0, priority = false }: Props) {
         <div className="mt-auto flex flex-wrap items-center gap-2 pt-6">
           <span className="rounded-full bg-blue-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.15em] text-blue-600 dark:bg-blue-500/15 dark:text-blue-300">{TYPE_LABEL[project.type]}</span>
           <span className="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500 dark:bg-white/10 dark:text-slate-300">{project.year} · {STATUS_LABEL[project.status]}</span>
-          {techs.slice(0, 3).map((t) => (
-            <span key={t.id} className="rounded-full border border-black/[0.08] px-3 py-1 text-[11px] font-semibold text-slate-600 dark:border-white/15 dark:text-slate-300">{t.name}</span>
-          ))}
+          <span className="ml-auto flex items-center gap-1.5" aria-label={`Built with ${techs.map((t) => t.name).join(", ")}`}>
+            {techs.slice(0, 5).map((t) => (
+              <span key={t.id} className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/[0.06] bg-white dark:border-white/10 dark:bg-slate-800">
+                <TechLogo name={t.name} icon={t.icon} size={18} />
+              </span>
+            ))}
+            {techs.length > 5 ? <span className="text-[11px] font-semibold text-slate-400">+{techs.length - 5}</span> : null}
+          </span>
         </div>
       </div>
     </Link>

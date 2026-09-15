@@ -8,6 +8,7 @@ import { slugify } from "@/lib/utils/slugify";
 import { GROUP_LABEL } from "@/lib/utils/format";
 import type { Collaborator, ProjectLink, ProjectWithRelations, TechnologyRow, TechGroup } from "@/types/database";
 import { Prose } from "@/components/shared/Prose";
+import { TechLogo } from "@/components/shared/TechLogo";
 import { Button, Field, Fieldset, Input, Notice, Select, Textarea } from "./ui";
 
 const BODY_TEMPLATE = `## Overview
@@ -89,6 +90,7 @@ export function ProjectForm({ project, technologies }: Props) {
       slug: slugify(result.data.name),
       group: newTech.group,
       proficiency: null,
+      icon: null,
       show_on_about: true,
       sort_order: 0,
       created_at: "",
@@ -212,8 +214,8 @@ export function ProjectForm({ project, technologies }: Props) {
             const t = techList.find((x) => x.id === id);
             if (!t) return null;
             return (
-              <button key={id} type="button" className="chip hover:border-danger hover:text-danger" onClick={() => setSelectedTech(selectedTech.filter((x) => x !== id))} aria-label={`Remove ${t.name}`}>
-                {t.name} ✕
+              <button key={id} type="button" className="chip gap-2 hover:border-danger hover:text-danger" onClick={() => setSelectedTech(selectedTech.filter((x) => x !== id))} aria-label={`Remove ${t.name}`}>
+                <TechLogo name={t.name} icon={t.icon} size={14} /> {t.name} ✕
               </button>
             );
           })}
@@ -233,6 +235,7 @@ export function ProjectForm({ project, technologies }: Props) {
                         onChange={(e) => setSelectedTech(e.target.checked ? [...selectedTech, t.id] : selectedTech.filter((x) => x !== t.id))}
                         className="accent-[var(--color-accent)]"
                       />
+                      <TechLogo name={t.name} icon={t.icon} size={16} />
                       {t.name}
                     </label>
                   </li>

@@ -2,7 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Bot, Check, Code2, Cpu, Database, Mail, MapPin, Plane, Sparkles, Users } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
-import type { ProjectWithRelations, SiteSettingsRow } from "@/types/database";
+import type { ProjectWithRelations, SiteSettingsRow, TechGroup, TechnologyRow } from "@/types/database";
+import { TechLogo } from "@/components/shared/TechLogo";
+import { GROUP_LABEL } from "@/lib/utils/format";
 import { Prose } from "@/components/shared/Prose";
 import { LocalTime } from "@/components/shared/LocalTime";
 import { coverOf } from "@/lib/db/public";
@@ -175,6 +177,52 @@ export function ProjectGrid({ projects }: { projects: ProjectWithRelations[] }) 
             </ScrollReveal>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Toolbox (technology logos) ---------------- */
+
+const TOOLBOX_ORDER: TechGroup[] = ["language", "frontend", "backend", "database", "ai", "desktop", "robotics", "embedded", "devops", "design", "hardware"];
+
+export function Toolbox({ technologies }: { technologies: TechnologyRow[] }) {
+  const visible = technologies.filter((t) => t.show_on_about);
+  if (visible.length === 0) return null;
+  const grouped = new Map<TechGroup, TechnologyRow[]>();
+  for (const t of visible) grouped.set(t.group, [...(grouped.get(t.group) ?? []), t]);
+  return (
+    <section id="toolbox" className="scroll-mt-24 px-6 py-20 lg:py-28">
+      <div className="mx-auto max-w-7xl">
+        <ScrollReveal className="max-w-3xl">
+          <span className="eyebrow">Toolbox</span>
+          <h2 className="mt-5 font-display text-5xl font-semibold leading-[0.95] tracking-tight text-slate-900 md:text-6xl dark:text-slate-50">
+            The tools I <span className="text-blue-600 dark:text-blue-400">actually use.</span>
+          </h2>
+          <p className="mt-6 text-xl leading-relaxed text-slate-500 dark:text-slate-400">
+            {visible.length} technologies across the stack, from languages to hardware. Hover a logo for the name; the full list with honest ratings is on the Skills page.
+          </p>
+        </ScrollReveal>
+        <div className="mt-14 flex flex-col gap-10">
+          {TOOLBOX_ORDER.filter((g) => grouped.has(g)).map((g, gi) => (
+            <ScrollReveal key={g} delay={(gi % 3) * 0.06}>
+              <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-blue-600 dark:text-blue-400">{GROUP_LABEL[g]}</p>
+              <ul className="mt-4 flex flex-wrap gap-3" aria-label={GROUP_LABEL[g]}>
+                {(grouped.get(g) ?? []).map((t) => (
+                  <li key={t.id} className="group/tech relative">
+                    <div className="flex h-[76px] w-[76px] items-center justify-center rounded-[1.3rem] border border-black/[0.06] bg-white shadow-[0_18px_40px_-30px_rgba(15,23,42,0.4)] transition-transform duration-300 hover:-translate-y-1.5 dark:border-white/10 dark:bg-slate-900">
+                      <TechLogo name={t.name} icon={t.icon} size={34} />
+                    </div>
+                    <span className="pointer-events-none absolute -bottom-8 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-slate-900 px-2 py-1 text-[11px] font-semibold text-white opacity-0 transition-opacity group-hover/tech:opacity-100 group-focus-within/tech:opacity-100">{t.name}</span>
+                  </li>
+                ))}
+              </ul>
+            </ScrollReveal>
+          ))}
+        </div>
+        <ScrollReveal className="mt-12">
+          <Link href="/skills" className="btn-light">See every skill, rated honestly</Link>
+        </ScrollReveal>
       </div>
     </section>
   );

@@ -19,6 +19,7 @@ export default function Footer({ settings }: { settings: SiteSettingsRow }) {
         { label: "About", href: "/about" },
         { label: "Journey", href: "/journey" },
         { label: "Skills", href: "/skills" },
+        { label: "Toolbox", href: "/#toolbox" },
         { label: "Now", href: "/now" },
         { label: "Contact", href: "/contact" },
       ],

@@ -6,6 +6,7 @@ import { Prose, type ImageDimensions } from "@/components/shared/Prose";
 import { coverOf, techsOf } from "@/lib/db/public";
 import { mediaUrl } from "@/lib/supabase/env";
 import { STATUS_LABEL, TYPE_LABEL } from "@/lib/utils/format";
+import { TechLogo } from "@/components/shared/TechLogo";
 import { ProjectCard } from "./ProjectCard";
 import ScrollReveal from "./ScrollReveal";
 
@@ -80,9 +81,14 @@ export function CaseStudy({ project, next, position, preview = false }: Props) {
           </ScrollReveal>
 
           <ScrollReveal delay={0.15} className="mt-4 flex flex-wrap items-center gap-2">
-            {techs.map((t) => (
-              <span key={t.id} className="rounded-full border border-black/[0.08] bg-white px-3.5 py-1.5 text-sm font-semibold text-slate-700 dark:border-white/15 dark:bg-slate-900 dark:text-slate-200">{t.name}</span>
-            ))}
+            <ul className="flex flex-wrap items-center gap-2" aria-label="Technologies">
+              {techs.map((t) => (
+                <li key={t.id} className="group/tech relative flex h-11 w-11 items-center justify-center rounded-2xl border border-black/[0.08] bg-white shadow-sm dark:border-white/15 dark:bg-slate-900">
+                  <TechLogo name={t.name} icon={t.icon} size={22} />
+                  <span className="pointer-events-none absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-slate-900 px-2 py-1 text-[11px] font-semibold text-white opacity-0 transition-opacity group-hover/tech:opacity-100 group-focus-within/tech:opacity-100">{t.name}</span>
+                </li>
+              ))}
+            </ul>
             {project.links.map((l) => (
               <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-500">
                 {l.label} <ArrowUpRight size={14} className="transition-transform group-hover:rotate-45" />
