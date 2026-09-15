@@ -29,8 +29,8 @@ const nextConfig: NextConfig = {
     imageSizes: [240, 400, 600],
   },
   experimental: {
-    // Uploads go through server actions; 5 MB file cap + multipart overhead.
-    serverActions: { bodySizeLimit: "6mb" },
+    // Uploads go through server actions. Files are downsized in the browser first; Vercel itself caps bodies at ~4.5 MB.
+    serverActions: { bodySizeLimit: "25mb" },
   },
   async headers() {
     const headers = [...securityHeaders];

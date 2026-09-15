@@ -31,7 +31,7 @@ media/                                   public bucket
 ```
 Admin form ──(multipart)──► server action `uploadProjectImage`
    1. auth: getUser() + is_admin()
-   2. validate: MIME in {image/png, image/jpeg, image/webp, image/avif}; size ≤ 5 MB;
+   2. validate: MIME in {image/png, image/jpeg, image/webp, image/avif}; no byte cap (browser downsizes first, server caps long side at 4000px);
       sniff magic bytes (not just the declared type); alt text present (≥ 3 chars)
    3. sharp(file).metadata() → width, height; reject if < 320px on the short side
       or > 8000px on the long side; strip EXIF (sharp rotate() + withMetadata(false)) — removes GPS/location data from photos
@@ -42,7 +42,7 @@ Admin form ──(multipart)──► server action `uploadProjectImage`
 
 - Files are stored **as uploaded** (after EXIF strip); no resizing at upload. `next/image` produces responsive AVIF/WebP variants on demand and caches them at Vercel's edge. Storing the original preserves quality for future re-crops.
 - Immutable cache headers are safe because filenames are UUIDs — a replaced image is a new object.
-- Progress: server actions do not stream progress; the admin shows an indeterminate state with the filename. Acceptable for ≤ 5 MB files. (V2: direct-to-storage signed upload with progress if needed.)
+- Progress: server actions do not stream progress; the admin shows an indeterminate state with the filename. Acceptable because the browser downsizes files before sending. (V2: direct-to-storage signed upload with progress if needed.)
 
 ## Delivery
 
@@ -63,7 +63,7 @@ Deletes are confirmed with a dialog that names the file and its project. No soft
 
 ## Limits and quotas
 
-- Per file: 5 MB. Per project: soft warning above 12 images (design guidance: 3–6).
+- Per file: none at the bucket (migration 0008); browser and server downsizing keep objects small. Per project: soft warning above 12 images (design guidance: 3–6).
 - Free tier storage (1 GB at time of writing) comfortably holds hundreds of 2× screenshots. The admin shows total bytes used (sum of `project_images.bytes`) on the projects list.
 
 ## Security notes

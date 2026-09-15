@@ -7,7 +7,7 @@ Media is managed **inside the thing it belongs to**: project images in the proje
 ### Upload
 
 - Drop zone + file input (`accept="image/png,image/jpeg,image/webp,image/avif"`, `multiple`).
-- Each file becomes a row in the gallery list immediately with an "Uploading…" state; the server action validates (type sniff, ≤ 5 MB, dimensions), strips EXIF, stores, and inserts the `project_images` row.
+- Each file becomes a row in the gallery list immediately with an "Uploading…" state; the server action validates (type sniff, minimum dimensions), downsizes anything over 4000px, strips EXIF, stores, and inserts the `project_images` row.
 - **Alt text is required before the row is considered complete.** An uploaded image without alt shows a danger marker and blocks publishing. The alt field sits directly under each thumbnail with help text: "Describe what the screenshot shows and why it matters. Example: 'Trace timeline for 12 June: VS Code sessions grouped by window title, with an idle gap at 10:30.'"
 - Caption (optional) renders under the image on the public page.
 - `Wide` toggle: on desktop the image spans all 12 columns and bleeds to the viewport edge.
@@ -48,7 +48,7 @@ Two slots: **Home (4:5)** and **About (3:4)**, plus one shared alt text. Upload 
 | Limit | Value | Where enforced |
 |-------|-------|----------------|
 | File types | png, jpeg, webp, avif | client `accept` + server sniff |
-| File size | ≤ 5 MB | client check + server |
+| File size | no cap; files over 2.5 MB or 2560px are downsized in the browser before upload (WebP q0.9), and the server caps the long side at 4000px | client + server |
 | Dimensions | short side ≥ 320px, long side ≤ 8000px | server (`sharp`) |
 | Images per project | soft warning > 12 | client |
 | Alt text | ≥ 3 chars, ≤ 300 | server |
@@ -56,6 +56,6 @@ Two slots: **Home (4:5)** and **About (3:4)**, plus one shared alt text. Upload 
 
 ## Failure handling
 
-- Validation failure → the row shows the reason ("Too large: 7.2 MB (max 5 MB)") with Remove.
+- Validation failure → the row shows the reason ("Not a valid image") with Remove.
 - Network failure → "Upload failed" with Retry (re-submits the same file) or Remove.
 - Storage upload succeeds but row insert fails → the action deletes the object and returns an error (no orphan). Row insert succeeds but revalidation fails → logged; the next publish/save revalidates again.

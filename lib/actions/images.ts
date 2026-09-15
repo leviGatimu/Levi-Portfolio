@@ -4,7 +4,7 @@ import { randomUUID } from "node:crypto";
 import sharp, { type Metadata as SharpMetadata } from "sharp";
 import { requireAdmin } from "@/lib/supabase/admin-guard";
 import { MEDIA_BUCKET } from "@/lib/supabase/env";
-import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_BYTES, imageMetaSchema } from "@/lib/validation/schemas";
+import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_SIDE, imageMetaSchema } from "@/lib/validation/schemas";
 import { revalidatePublic } from "./revalidate";
 import { fail, type ActionResult } from "./types";
 
@@ -19,12 +19,13 @@ const FORMAT_TO_EXT: Record<string, { ext: string; contentType: string }> = {
 };
 
 /**
- * Validates by sniffing the real format (not the declared MIME type), checks
- * size and dimensions, applies EXIF rotation and strips all metadata (GPS etc).
+ * Validates by sniffing the real format (not the declared MIME type), applies
+ * EXIF rotation, strips all metadata (GPS etc) and shrinks oversized images
+ * instead of rejecting them. No byte limit: the browser already downsizes big
+ * files (lib/utils/client-image.ts) and this is the safety net behind it.
  */
 async function processImage(file: File): Promise<Processed | { error: string }> {
   if (file.size === 0) return { error: "Empty file" };
-  if (file.size > MAX_IMAGE_BYTES) return { error: `Too large: ${(file.size / 1024 / 1024).toFixed(1)} MB (max 5 MB)` };
   if (!(ALLOWED_IMAGE_TYPES as readonly string[]).includes(file.type)) return { error: "Only PNG, JPEG, WebP or AVIF" };
 
   const input = Buffer.from(await file.arrayBuffer());
@@ -38,12 +39,12 @@ async function processImage(file: File): Promise<Processed | { error: string }> 
   if (!fmt) return { error: "Unsupported image format" };
 
   // Strip metadata by re-encoding without withMetadata(); rotate() bakes in EXIF orientation first.
-  const buffer = await sharp(input).rotate().toBuffer();
+  // resize() with withoutEnlargement only shrinks images whose long side exceeds MAX_IMAGE_SIDE.
+  const buffer = await sharp(input).rotate().resize({ width: MAX_IMAGE_SIDE, height: MAX_IMAGE_SIDE, fit: "inside", withoutEnlargement: true }).toBuffer();
   const out = await sharp(buffer).metadata();
   const width = out.width ?? 0;
   const height = out.height ?? 0;
-  if (Math.min(width, height) < 320) return { error: "Image is too small (short side must be ≥ 320px)" };
-  if (Math.max(width, height) > 8000) return { error: "Image is too large (long side must be ≤ 8000px)" };
+  if (Math.min(width, height) < 320) return { error: "Image is too small (short side must be at least 320px)" };
   return { buffer, ext: fmt.ext, contentType: fmt.contentType, width, height };
 }
 

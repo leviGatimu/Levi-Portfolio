@@ -103,7 +103,8 @@ export const imageMetaSchema = z.object({
 });
 
 export const ALLOWED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/avif"] as const;
-export const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+/** Long side cap applied server-side; larger uploads are resized down, never rejected. */
+export const MAX_IMAGE_SIDE = 4000;
 
 /**
  * Rules that must hold before a project may be published. Pure, so the same

@@ -11,12 +11,13 @@ Supabase Dashboard → **SQL Editor** → **New query** → paste the file → *
 | Order | File | What it does |
 |-------|------|--------------|
 | 1 | `migrations/0001_init.sql` | Tables, enums, triggers, indexes, the single `site_settings` row, `admins` table, `is_admin()` and all Row Level Security policies |
-| 2 | `migrations/0002_storage.sql` | Creates the public `media` bucket (5 MB per file, images only) and its policies |
+| 2 | `migrations/0002_storage.sql` | Creates the public `media` bucket (images only) and its policies |
 | 3 | `migrations/0003_seed_technologies.sql` | Starter technology list for the picker (optional; edit later in the admin) |
 | 4 | `migrations/0004_admin_user.sql` | Makes the dashboard user the admin (UID already filled in) |
 | 5 | `migrations/0005_site_copy.sql` | Adds the "Beyond software" highlights and fills in the descriptive bio, intro and now text (all editable in Admin > Site) |
 | 6 | `migrations/0006_analytics_and_journey.sql` | Cookieless page-view analytics for the admin dashboard, and the Journey timeline column |
 | 7 | `migrations/0007_technology_icons.sql` | Logo slugs (simpleicons.org) for technologies; editable per technology in the admin |
+| 8 | `migrations/0008_media_no_size_limit.sql` | Removes the 5 MB per-file cap on the `media` bucket (images are downsized in the browser and on the server instead) |
 
 All three are safe to run again if something goes wrong halfway.
 

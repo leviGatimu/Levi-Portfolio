@@ -62,7 +62,7 @@ Resolved 2026-09-15 by "base it on the reference": accent is signal green `#4ee1
 
 ## Technical decisions still open (non-blocking)
 
-- Server action vs route handler for uploads > 4.5 MB (Vercel body limit for server actions/functions is ~4.5 MB on some plans — **verify**; if binding, lower the file cap to 4 MB or use direct-to-storage signed uploads).
+- Done: uploads are downsized in the browser (lib/utils/client-image.ts) so server-action bodies stay under the ~4.5 MB Vercel cap. Direct-to-storage signed uploads remain an option if originals must be kept byte-for-byte.
 - Whether previews use a separate Supabase project later (D21).
 - Add TOTP MFA for the admin (V2 candidate; cheap).
 

@@ -49,7 +49,7 @@ The most important controls are, in order: **RLS correctness, no raw HTML render
 
 ### Uploads
 
-- [ ] Type whitelist (png/jpeg/webp/avif), byte sniffing, size cap 5 MB, dimension bounds, EXIF stripped.
+- [ ] Type whitelist (png/jpeg/webp/avif), byte sniffing, dimension bounds (min 320px, long side resized to 4000px), EXIF stripped.
 - [ ] UUID filenames; paths built server-side; no SVG.
 - [ ] Storage write policies `is_admin()`; bucket public read only.
 

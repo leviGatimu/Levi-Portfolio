@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useActionState, useRef, useState } from "react";
 import { deleteProjectImage, moveProjectImage, setCoverImage, updateProjectImage, uploadProjectImages } from "@/lib/actions/images";
 import { mediaUrl } from "@/lib/supabase/env";
+import { prepareFormFiles } from "@/lib/utils/client-image";
 import type { ProjectImageRow } from "@/types/database";
 import { ActionButton } from "./ActionButton";
 import { Badge, Button, Field, Fieldset, Input, Notice, Textarea } from "./ui";
@@ -14,13 +15,19 @@ export function GalleryManager({ projectId, images }: Props) {
   const [state, action, pending] = useActionState(uploadProjectImages.bind(null, projectId), undefined);
   const formRef = useRef<HTMLFormElement>(null);
   const [fileNames, setFileNames] = useState<string[]>([]);
+  const [preparing, setPreparing] = useState(false);
 
   return (
-    <Fieldset legend="Images" description="Real screenshots at 2× (PNG for UI, JPEG for photos), max 5 MB each. The first upload becomes the cover; alt text is required.">
+    <Fieldset legend="Images" description="Real screenshots at 2× (PNG for UI, JPEG for photos). Any size: large files are shrunk in the browser before upload. The first upload becomes the cover; alt text is required.">
       <form
         ref={formRef}
-        action={(fd) => {
-          action(fd);
+        action={async (fd) => {
+          setPreparing(true);
+          try {
+            action(await prepareFormFiles(fd, "files"));
+          } finally {
+            setPreparing(false);
+          }
           setFileNames([]);
           formRef.current?.reset();
         }}
@@ -43,8 +50,8 @@ export function GalleryManager({ projectId, images }: Props) {
           <Field label="Alt text" htmlFor="upload-alt" required help="Describe what the screenshot shows. Numbered automatically when uploading several." error={state && !state.ok ? state.fieldErrors?.alt : undefined}>
             <Input id="upload-alt" name="alt" required minLength={3} maxLength={300} placeholder="Study Flow dashboard showing today's timetable" />
           </Field>
-          <Button type="submit" variant="primary" disabled={pending} aria-busy={pending}>
-            {pending ? "Uploading…" : "Upload"}
+          <Button type="submit" variant="primary" disabled={pending || preparing} aria-busy={pending || preparing}>
+            {preparing ? "Preparing" : pending ? "Uploading" : "Upload"}
           </Button>
         </div>
         {fileNames.length ? <p className="meta text-fg-subtle">{fileNames.join(" · ")}</p> : null}
