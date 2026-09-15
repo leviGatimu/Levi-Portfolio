@@ -6,7 +6,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: "Levi Gatimu · Student developer", template: "%s · Levi Gatimu" },
   description: "Student developer in Kigali building full-stack software, AI systems and robotics.",
+  // app/icon.svg and app/apple-icon.png are picked up automatically; the manifest adds the install icon.
+  manifest: "/manifest.webmanifest",
 };
+
+export const viewport = { themeColor: "#2563eb" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
