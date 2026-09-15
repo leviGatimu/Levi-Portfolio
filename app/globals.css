@@ -1,0 +1,336 @@
+@import "tailwindcss";
+
+@theme {
+  /* ---- Surfaces: warm charcoal, three narrow steps (no shadows, no gradients) ---- */
+  --color-bg: #202126;
+  --color-bg-raised: #292a2f;
+  --color-bg-sunken: #1a1a1e;
+  --color-bg-deep: #141417;
+
+  /* ---- Text on dark ---- */
+  --color-fg: #f2f0eb;
+  --color-fg-muted: #a5a4a0;
+  --color-fg-subtle: #83827e;
+
+  /* ---- Rules ---- */
+  --color-rule: #34353b;
+  --color-rule-strong: #43444b;
+
+  /* ---- Accent: one signal green, used like a highlighter ---- */
+  --color-accent: #4ee1a0;
+  --color-accent-ink: #10221a;
+
+  /* ---- Paper (inverted section) ---- */
+  --color-paper: #f1ede6;
+  --color-ink: #17181b;
+  --color-ink-muted: #5c5a55;
+  --color-paper-rule: #d9d4cb;
+
+  /* ---- Feedback (admin) ---- */
+  --color-danger: #ff5c5c;
+  --color-success: #4ee1a0;
+
+  /* ---- Fonts (set by next/font in layout.tsx) ---- */
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-sans: var(--font-plex-sans), "Helvetica Neue", Arial, sans-serif;
+
+  /* ---- Fluid type scale ---- */
+  --text-display-xl: clamp(2.125rem, 1.1rem + 2.9vw, 3.75rem);
+  --text-display-xl--line-height: 1.02;
+  --text-display-xl--letter-spacing: -0.03em;
+
+  --text-display-lg: clamp(2rem, 1rem + 3.6vw, 4rem);
+  --text-display-lg--line-height: 1.05;
+  --text-display-lg--letter-spacing: -0.02em;
+
+  --text-display-md: clamp(1.625rem, 1rem + 2vw, 2.5rem);
+  --text-display-md--line-height: 1.1;
+  --text-display-md--letter-spacing: -0.015em;
+
+  --text-heading: clamp(1.25rem, 1rem + 0.9vw, 1.625rem);
+  --text-heading--line-height: 1.2;
+
+  --text-lead: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
+  --text-lead--line-height: 1.5;
+
+  --text-body: 1rem;
+  --text-body--line-height: 1.65;
+
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+
+  --text-meta: 0.6875rem;
+  --text-meta--line-height: 1.4;
+  --text-meta--letter-spacing: 0.1em;
+
+  --text-meta-lg: 0.8125rem;
+  --text-meta-lg--line-height: 1.5;
+  --text-meta-lg--letter-spacing: 0.02em;
+
+  /* ---- Motion ---- */
+  --ease-out-quart: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 150ms;
+  --duration-base: 350ms;
+  --duration-slow: 700ms;
+
+  /* ---- Layout ---- */
+  --container-site: 1440px;
+  --breakpoint-xs: 30rem;
+}
+
+/* ---------- Base ---------- */
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-feature-settings: "kern", "liga", "calt";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-accent-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  img {
+    display: block;
+  }
+  [data-surface="paper"] {
+    --color-bg: var(--color-paper);
+    --color-bg-raised: #e7e2d9;
+    --color-fg: var(--color-ink);
+    --color-fg-muted: var(--color-ink-muted);
+    --color-fg-subtle: #75736d;
+    --color-rule: var(--color-paper-rule);
+    --color-rule-strong: #c5bfb4;
+    background: var(--color-bg);
+    color: var(--color-fg);
+    color-scheme: light;
+  }
+  [data-surface="paper"] :focus-visible {
+    outline-color: var(--color-ink);
+  }
+  [data-surface="paper"] ::selection {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+}
+
+/* ---------- Utilities used across the site ---------- */
+@utility container-site {
+  width: 100%;
+  max-width: var(--container-site);
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @variant sm { padding-inline: 1.5rem; }
+  @variant lg { padding-inline: 3rem; }
+  @variant xl { padding-inline: 4rem; }
+}
+
+/* Mono uppercase metadata label — the instrument-readout style */
+@utility meta {
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
+  letter-spacing: var(--text-meta--letter-spacing);
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility meta-lg {
+  font-family: var(--font-mono);
+  font-size: var(--text-meta-lg);
+  line-height: var(--text-meta-lg--line-height);
+  letter-spacing: var(--text-meta-lg--letter-spacing);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Text link with an accent underline that draws in */
+@utility link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size var(--duration-base) var(--ease-out-quart);
+  padding-bottom: 1px;
+  &:hover, &:focus-visible {
+    background-size: 100% 1px;
+  }
+}
+
+@utility link-accent {
+  color: var(--color-accent);
+  background-image: linear-gradient(var(--color-accent), var(--color-accent));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 1px;
+  transition: background-size var(--duration-base) var(--ease-out-quart), opacity var(--duration-fast);
+  padding-bottom: 2px;
+  &:hover, &:focus-visible {
+    background-size: 100% 2px;
+  }
+}
+
+/* Small outlined chip (tech tags) */
+@utility chip {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.375rem 0.5rem;
+  border: 1px solid var(--color-rule-strong);
+  border-radius: 2px;
+  color: var(--color-fg-muted);
+  white-space: nowrap;
+}
+
+@utility chip-accent {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.4375rem 0.625rem;
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  border-radius: 2px;
+  font-weight: 500;
+}
+
+/* Raised panel */
+@utility panel {
+  background: var(--color-bg-raised);
+  border-radius: 4px;
+}
+
+/* Below-fold reveal. Visible by default; JS adds data-reveal="pending" only when motion is allowed. */
+@utility reveal {
+  transition: opacity var(--duration-slow) var(--ease-out-quart), transform var(--duration-slow) var(--ease-out-quart);
+  &[data-reveal="pending"] {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+/* ---------- Prose (markdown case studies) ---------- */
+.prose {
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+  color: var(--color-fg-muted);
+  max-width: 68ch;
+}
+.prose > * + * { margin-top: 1.1em; }
+.prose h2 {
+  font-family: var(--font-mono);
+  font-size: var(--text-heading);
+  line-height: var(--text-heading--line-height);
+  color: var(--color-fg);
+  font-weight: 500;
+  margin-top: 2.5em;
+  padding-top: 1.25em;
+  border-top: 1px solid var(--color-rule);
+}
+.prose h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.prose h3 {
+  font-family: var(--font-mono);
+  font-size: 1.0625rem;
+  color: var(--color-fg);
+  font-weight: 500;
+  margin-top: 2em;
+}
+.prose strong { color: var(--color-fg); font-weight: 600; }
+.prose em { font-style: italic; }
+.prose a {
+  color: var(--color-fg);
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-underline-offset: 0.2em;
+}
+.prose a:hover { text-decoration-thickness: 2px; }
+.prose ul, .prose ol { padding-left: 1.25em; }
+.prose ul { list-style: square; }
+.prose ol { list-style: decimal; }
+.prose li + li { margin-top: 0.4em; }
+.prose li::marker { color: var(--color-fg-subtle); }
+.prose blockquote {
+  border-left: 2px solid var(--color-accent);
+  padding-left: 1.25em;
+  color: var(--color-fg);
+  font-style: italic;
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--color-bg-sunken);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  color: var(--color-fg);
+}
+.prose pre {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-rule);
+  border-radius: 4px;
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  color: var(--color-fg);
+  max-width: none;
+}
+.prose pre code { background: none; padding: 0; font-size: inherit; }
+.prose hr { border: 0; border-top: 1px solid var(--color-rule); margin: 3em 0; }
+.prose table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
+.prose th, .prose td { text-align: left; padding: 0.6em 0.75em; border-bottom: 1px solid var(--color-rule); vertical-align: top; }
+.prose th { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-fg-subtle); font-weight: 500; }
+.prose figure { margin: 2.5em 0; max-width: none; }
+.prose figure img { width: 100%; height: auto; border-radius: 4px; box-shadow: inset 0 0 0 1px var(--color-rule); }
+.prose figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-fg-subtle);
+  margin-top: 0.75em;
+  letter-spacing: 0.02em;
+}
+.prose img { max-width: 100%; height: auto; border-radius: 4px; }
+
+/* ---------- Motion accessibility ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 150ms !important;
+    transition-property: opacity, background-color, color, border-color, background-size !important;
+  }
+  .reveal[data-reveal="pending"] { transform: none; }
+}
+
+/* ---------- Print ---------- */
+@media print {
+  body { background: #fff; color: #111; }
+  header, footer, nav, .no-print { display: none !important; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.8em; }
+}

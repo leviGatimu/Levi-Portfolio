@@ -15,9 +15,10 @@ Updated 2026-09-15. Items move between sections as they resolve; resolved items 
 
 ## Decisions needed from Levi (blocking or near-blocking)
 
+Resolved 2026-09-15 by "base it on the reference": accent is signal green `#4ee1a0` (D24); fonts are IBM Plex Mono + Sans. Change either in `app/globals.css` / `app/layout.tsx`.
+
 | # | Decision | Options | Recommendation | Blocks |
 |---|----------|---------|----------------|--------|
-| Q1 | **Accent colour** | A International Orange · B Signal Amber · (other) | A | Phase 2 tokens |
 | Q2 | **Opening statement** | A "I build software, AI systems and robots — and finish them." · B "Software, AI systems and robotics. Built, not listed." · C plain descriptive · your own | A | Home copy |
 | Q3 | **Featured projects and order** | From: Study Flow, Trace, Rwasim, Wixy, Tembera (if it exists), Planetary Scout | 01 Study Flow · 02 Trace · 03 Rwasim · 04 Wixy | Home |
 | Q4 | **Tembera, RwaSport, School Finder** — do they exist? Where? | Provide repo/URL/status or drop | — | Inventory |

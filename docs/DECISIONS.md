@@ -162,3 +162,22 @@ Format: **Decision · Reason · Alternatives · Consequences · Date · Status.*
 - **Alternatives:** Custom domain (`levigatimu.com`, which currently does not resolve).
 - **Consequences:** `NEXT_PUBLIC_SITE_URL` is the production `*.vercel.app` URL; Phase 8 drops the DNS/domain tasks; the GitHub README link should point at the Vercel URL. A custom domain can be added later in Vercel with no code change.
 - **Date:** 2026-09-15 · **Status:** Accepted
+
+### D24 — Implementation follows the reference directly: IBM Plex Mono/Sans, signal-green accent, raised project panels (supersedes D03, D04 and the "no cards" rule in D02's spirit)
+
+- **Reason:** Levi's instruction on 2026-09-15 was to base the build on the reference image and make projects "look nice" as clickable panels. The reference's identity is monospace headlines, a mint/green accent used sparingly, and raised dark panels with screenshots cropped at the panel edge. Following it directly is what was asked; Bricolage + International Orange were planning-time proposals that never got a decision.
+- **Alternatives:** Bricolage Grotesque + Geist Mono with an orange accent (D03/D04); the plate/ledger homepage from the design docs.
+- **Consequences:** Fonts: IBM Plex Mono (headlines, metadata) + IBM Plex Sans (body). Accent token `--color-accent: #4ee1a0` (one place to change). Homepage = hero (chip, statement, backing circle + portrait, real facts) → Latest works panels → Introduce (focus panels + hello) → Contact. Design docs describing plates, ledger and the paper section describe the *earlier* plan; the code is the reference for the current design. Everything else in the docs (schema, RLS, admin, security, performance, SEO) is implemented as written.
+- **Date:** 2026-09-15 · **Status:** Accepted
+
+### D25 — Migrations are plain SQL files in `backend/migrations/`, run by Levi in the Supabase SQL editor
+
+- **Reason:** Levi asked for a backend folder where he can see and run migrations himself; no Supabase CLI or MCP in the workflow.
+- **Consequences:** `types/database.ts` is hand-maintained; each migration is idempotent; `backend/README.md` is the runbook. The public site tolerates a missing schema (renders its shell with a console warning) so a deploy before the migrations does not crash.
+- **Date:** 2026-09-15 · **Status:** Accepted
+
+### D26 — Caching by page-level ISR + `revalidatePath` on every admin write
+
+- **Reason:** Simplest cache model that is stable across Next.js versions. Public pages revalidate hourly and immediately after any publish/edit/reorder.
+- **Consequences:** `/work` is dynamic (it reads `?type=`); everything else is static with a 1-hour revalidate.
+- **Date:** 2026-09-15 · **Status:** Accepted

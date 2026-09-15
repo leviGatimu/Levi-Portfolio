@@ -1,30 +1,32 @@
 # HANDOFF
 
 ## Current Task
-Planning phase (Phase 0) for Levi Gatimu's portfolio rebuild: research, design direction, architecture, content inventory, CMS design, and full `/docs` documentation before any code is written.
+Build the portfolio (public site + private admin) on Next.js 16 + Supabase, based directly on the Dribbble reference, with SQL migrations Levi runs himself.
 
 ## Status
-Solved — Phase 0 complete on 2026-09-15. All planning documents written under `docs/`. **No implementation has started; the project directory contains only `docs/` and this file.** Waiting on Levi's answers to `docs/TODO.md` → "Decisions needed from Levi" (Q1–Q15) before Phase 1/2 choices that depend on them (accent, statement, featured set, portrait, domain).
+Solved (V1 code complete) — 2026-09-15. `npm run build`, `typecheck`, `lint` all pass. Public routes and admin auth redirects verified against the production build; homepage, project panels, case study and admin markup verified via headless screenshots. **The Supabase schema has not been applied yet** — Levi runs `backend/migrations/*.sql` (see `backend/README.md`), creates the admin user, and adds it to `public.admins`. Until then the public site renders its empty shell with a `[db] schema not found` console warning, and `/admin` login cannot succeed.
 
 ## Progress
-- [x] Inspected current site (portfolioz-blue.vercel.app) — content extracted, inflated claims and phone number identified for removal
-- [x] Analysed the Dribbble reference at pixel level (colours sampled, composition, type, accent usage)
-- [x] Verified GitHub: 78 repos via authenticated `gh`; READMEs, languages, commits, live URLs checked for key projects
-- [x] Wrote all docs: product (5), design (8), content (4), architecture (9), admin (4), research (3), implementation (4), DECISIONS, TODO, README
-- [x] Levi confirmed: free Vercel domain, Supabase backend, he supplies the repo (D23)
-- [ ] Levi answers TODO Q1–Q15 (Q7 domain now resolved and removed)
-- [ ] Phase 1 — Foundation (see docs/implementation/implementation-plan.md T1.01–T1.15)
+- [x] Phase 0 planning docs (`docs/`)
+- [x] Next.js 16 app scaffold, Tailwind v4 tokens, IBM Plex fonts, security headers
+- [x] `backend/migrations` 0001 (schema + RLS), 0002 (storage bucket + policies), 0003 (technology seed); `backend/README.md` runbook
+- [x] Public site: home (hero, latest works panels, introduce, contact), `/work` (+ filters, archive), `/work/[slug]` case study (metadata, hero, markdown narrative, gallery, video embed, next), `/about` (bio, focus, skills with levels, now), 404, sitemap, robots, OG images, JSON-LD
+- [x] Admin: login (rate-limited), proxy + `requireAdmin` + RLS, projects list (search/filter/reorder/feature/publish), project editor (all fields, tech picker with quick-add, links, collaborators, markdown with template + preview), image upload (sniff/size/dimension checks, EXIF strip, UUID paths, cover/gallery/wide/caption/reorder/delete, copy Markdown), publish validation panel, delete with name confirmation, technologies CRUD, site settings + portraits + JSON export, draft preview route
+- [ ] Levi: run migrations, create admin user, log in, add projects and the portrait
+- [ ] Levi: connect the repo to Vercel with the three env vars (`NEXT_PUBLIC_SITE_URL` = the `*.vercel.app` URL)
+- [ ] Nice-to-have later: e2e tests (Playwright is installed as `playwright-core`; `scripts/screenshot.mjs` drives the system Edge), Lighthouse pass with real content, TOTP MFA
 
 ## Working Notes
-- Read `docs/README.md` first; it gives the reading order and the source-of-truth hierarchy.
-- Key findings a new session must not re-derive:
-  - Tembera, RwaSport, School Finder: **no repositories exist** anywhere on the account. Sentinel Signals ≈ `Rwasim` (unconfirmed).
-  - Strongest verified projects: `study-flow-app` (+ `Study-Flow` releases, `study-flow-website`), `Trace`, `Rwasim`, `Wixy` (private), `Space-robot` (Planetary Scout, README only), `forge`, `zibrahcode` (client, live at zibrahcode.com), `SoW-se-Africa`.
-  - Hosting decision from Levi (2026-09-15): free `*.vercel.app` domain, Supabase backend, he provides the GitHub repo to push to — keep it simple (D23). `levigatimu.com` is not used.
-  - Design decisions: dark warm charcoal + off-white + one accent + one paper section; Bricolage Grotesque + Geist Mono (validate vs Archivo in Phase 2); CSS-only motion; no theme toggle; no contact form.
-  - Stack: Next.js App Router, Tailwind v4, Supabase (Postgres/Auth/Storage, RLS, single admin allow-list), Vercel; Markdown case studies with structured summary fields; 5 tables + 1 join.
-- Tooling notes: Chrome extension was not connected this session (used curl + Python/PIL for the reference image); `gh` is authenticated as `leviGatimu`; long multi-file bash heredocs failed once — write docs with the Write tool.
-- Next step on resume: if TODO answers exist, record them in `docs/DECISIONS.md`/`docs/TODO.md`, then start **T1.01** (`create-next-app`) following `docs/implementation/coding-conventions.md`. Do not seed any project data — the only dev data is a hand-entered *draft* of Trace from its README (T3.02).
+- Env: `.env.local` holds `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_SITE_URL`. Only the publishable key is ever used.
+- Design in code (D24): charcoal tokens in `app/globals.css` `@theme`; accent `#4ee1a0`; fonts in `app/layout.tsx`. The planning docs under `docs/design` describe the earlier plate/ledger/paper concept — the code is the current design.
+- Data flow: public pages use the cookie-less client (`lib/supabase/public.ts`) and are ISR (1h); every admin write calls `revalidatePublic()` (`lib/actions/revalidate.ts`). Admin uses `@supabase/ssr` cookies; `proxy.ts` redirects, `requireAdmin()` + RLS enforce.
+- `mediaUrl()` returns absolute paths/URLs unchanged (used by fixtures); storage paths become public bucket URLs.
+- `types/database.ts` is hand-written — update it when a migration changes the schema (Relationships are needed for embedded selects to type-check).
+- Verified: `next build` passes with the schema missing; routes `/`, `/work`, `/about`, `/work/[slug]` (404 for unknown), `/admin` → login redirect, sitemap, robots, OG image 1200×630. Headless checks showed no horizontal overflow at 390 and 1440.
+- Known: `Reveal` hides below-fold blocks until intersection with a 2s fallback; full-page screenshot tools should scroll first (`scripts/screenshot.mjs` does).
+- Tooling: multi-file bash heredocs sometimes fail to parse in this environment — write source files with the Write tool or one file per heredoc.
+- Next step on resume: if migrations are applied, log in at `/admin/login`, create a real project end-to-end (upload → publish) and confirm it appears on `/`; then deploy to Vercel and run Lighthouse on the preview URL.
 
 ## Recently Completed
-- 2026-09-15: Phase 0 planning and documentation (this task).
+- 2026-09-15: V1 implementation — public site, admin CMS, migrations, README.
+- 2026-09-15: Phase 0 planning and documentation.
